@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {
     StyleSheet,
     View,
@@ -7,7 +7,7 @@ import {
     Image
 } from 'react-native';
 
-class MyNotificationsScreen extends React.Component {
+class MyNotificationsScreen extends Component {
     static navigationOptions = {
         title:'通知',
         drawerLabel: '通知',

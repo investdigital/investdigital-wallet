@@ -47,7 +47,6 @@ constructor(props) {
         alert(' 发送成功')
       }
      }
-
     render(){;
         return(
             <View style={{backgroundColor:'#fff',flex:1,}}>

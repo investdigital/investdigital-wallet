@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {
     Button,
     Image,
@@ -6,7 +6,7 @@ import {
     Text
 } from 'react-native';
 
-class KeystoreScreen extends React.Component {
+class KeystoreScreen extends Component{
     static navigationOptions = {
         title:'导出Keystore',
     };
