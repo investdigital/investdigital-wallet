@@ -17,6 +17,8 @@ class SendPage extends Component{
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
+        headerBackTitle:null,
+        headerLeft:null
     };
     render(){;
         return(

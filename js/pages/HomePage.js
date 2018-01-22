@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {
     StyleSheet,
     View,
@@ -8,10 +8,11 @@ import {
 } from 'react-native';
 
 import Banner from './Banner';
-class HomePage extends React.Component{
-
+class HomePage extends Component{
     static navigationOptions={
-        title: '首页',//设置标题内容
+        title: '首页',//设置标题内容,
+        headerBackTitle:null,
+        headerLeft:null,
     };
     constructor(props) {
         super(props);

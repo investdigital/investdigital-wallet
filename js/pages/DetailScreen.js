@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {
     Button,
     Image,
@@ -6,7 +6,7 @@ import {
     Text
 } from 'react-native';
 
-class DetailScreen extends React.Component {
+class DetailScreen extends Component{
     static navigationOptions = {
         title:'详情',
     };

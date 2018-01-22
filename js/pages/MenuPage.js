@@ -19,6 +19,8 @@ class MenuPage extends Component{
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
+        headerBackTitle:null,
+        headerLeft:null,
     };
     render(){
         const {navigate} = this.props.navigation;

@@ -22,5 +22,15 @@ export default {
     widthThreeQuarters: screenWidth * 0.75,
   },
   // Padding
-  padding: 20
+    padding_5: 5,
+    padding_10: 10,
+    padding_20: 20,
+    padding_25: 25,
+    padding_30: 30,
+    //margin
+    margin_5:5,
+    margin_10:10,
+    margin_20:20,
+    margin_25:25,
+    margin_30:30,
 };
