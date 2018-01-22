@@ -8,6 +8,7 @@ import {
     TouchableHighlight,
     Image
 } from 'react-native';
+import lightwallet from 'eth-lightwallet';
 import {AppSizes, AppComponent} from '../style/index';
 class GuideViewScreen extends Component{
     static navigationOptions={
@@ -20,6 +21,7 @@ class GuideViewScreen extends Component{
         };
     }
     showMnemonic(){
+        // var s = lightwallet.keystore.generateRandomSeed();
         this.setState({
             inputShow:false
         })
@@ -44,7 +46,7 @@ class GuideViewScreen extends Component{
                     </View>
                     :
                     <View>
-                        <Text>keystore</Text>
+                        <Text>keystore{lightwallet.keystore.generateRandomSeed()}</Text>
                         <TouchableHighlight style={AppComponent.btn} underlayColor="#008AC4"  onPress={() => navigate('Home',{data:'Keystore'})}>
                             <Text style={styles.btnText}>
                                 下一步
