@@ -9,6 +9,7 @@ import {
     Image
 } from 'react-native';
 import lightwallet from 'eth-lightwallet';
+import Wallet from 'ethereumjs-wallet';
 import {AppSizes, AppComponent} from '../style/index';
 class GuideViewScreen extends Component{
     static navigationOptions={
