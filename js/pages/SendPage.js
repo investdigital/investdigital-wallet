@@ -29,6 +29,7 @@ constructor(props) {
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
+
     }
 
     onClick(){

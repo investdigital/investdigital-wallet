@@ -10,7 +10,7 @@ import {
     TouchableHighlight
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
-
+import {AppSizes} from '../style/index';
 class DetailScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -55,7 +55,7 @@ class DetailScreen extends React.Component {
                 </TouchableHighlight>
             )
         }
-    _Unfoldthecontent = ()=>{
+    _Unfoldthecontent(){
     alert('-----we-w--')
     console.log(this.state.isHiden)
 //    alert(this.state.isHiden)
@@ -78,7 +78,7 @@ class DetailScreen extends React.Component {
                  {this.getButton(params.address, 'top', DURATION.LENGTH_SHORT)}
                  <Toast ref="toast" position={this.state.position}/>
                    <View style={{flex:1}}>
-                     <Text style={{padding:5}} onPress={()=>this._Unfoldthecontent}> 更多... </Text>
+                     <Text style={{padding:5}} onPress={this._Unfoldthecontent.bind(this)}> 更多... </Text>
                   </View>
                   <View style={{flex:1}}>
                   <Text style={{padding:5}}>比特币交易ID</Text>
