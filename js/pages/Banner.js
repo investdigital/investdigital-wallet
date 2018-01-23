@@ -13,8 +13,12 @@ constructor(props) {
 
     };
   }
+
+  onClick(){
+    alert('2222')
+  }
    render(){
-       return(
+    return(
         <SafeAreaView
             style={styles.bannerContainer}
             forceInset={{ vertical: 'never' }}
@@ -22,8 +26,10 @@ constructor(props) {
             <View style={styles.banner}>
               <Text style={styles.title}>bread
                 <Text style={styles.title1}> (Testnet)</Text>
-                  <Text style={styles.title}> {'\r\n'}{'\r\n'}b2,000</Text>
-                   <Text style={styles.title2}>= ¥142.71</Text>
+                  <Text style={styles.title}  onPress={this.onClick.bind(this)}> {'\r\n'}{'\r\n'}b2,000
+                    <Text style={styles.title2}> = ¥142.71</Text>
+                  </Text>
+
               </Text>
 
             </View>
@@ -37,7 +43,7 @@ export default Banner;
 
 const styles = StyleSheet.create({
   bannerContainer: {
-    backgroundColor: '#EA668F',
+    backgroundColor: '#329AFF',
   },
   banner: {
     flexDirection: 'row',
@@ -46,8 +52,8 @@ const styles = StyleSheet.create({
     height:130
   },
   title: {
-    fontSize: 18,
-    fontWeight: '200',
+    fontSize: 20,
+    fontWeight: '400',
     color: '#fff',
     marginTop:8,
   },
@@ -58,8 +64,8 @@ const styles = StyleSheet.create({
         marginTop:8,
   },
   title2:{
-      fontSize: 12,
-      fontWeight: '200',
+      fontSize: 14,
+      fontWeight: '400',
       color: '#fff',
       marginTop:8,
   },

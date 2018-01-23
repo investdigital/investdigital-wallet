@@ -41,7 +41,7 @@ class DetailScreen extends React.Component {
             this.setState({
                 position: position,
             })
-            this.refs.toast.show('已复制到剪切板。');
+            this.refs.toast.show('已复制到剪切板');
         }
 
         getButton(text, position) {
@@ -49,6 +49,7 @@ class DetailScreen extends React.Component {
              Clipboard.setString(text);
             return(
                 <TouchableHighlight
+                   underlayColor='#fff'
                     style={{padding:5,alignItems:'center'}}
                     onPress={()=>this.onClick(text, position)}>
                     <Text>{text}</Text>
@@ -56,10 +57,8 @@ class DetailScreen extends React.Component {
             )
         }
     _Unfoldthecontent(){
-    alert('-----we-w--')
     console.log(this.state.isHiden)
-//    alert(this.state.isHiden)
-//       this.setState({isHiden: false})
+       this.setState({isHiden: false})
     }
 
     render() {
@@ -77,15 +76,19 @@ class DetailScreen extends React.Component {
                  <Text style={{padding:5}}>已在此地址接收 </Text>
                  {this.getButton(params.address, 'top', DURATION.LENGTH_SHORT)}
                  <Toast ref="toast" position={this.state.position}/>
-                   <View style={{flex:1}}>
-                     <Text style={{padding:5}} onPress={this._Unfoldthecontent.bind(this)}> 更多... </Text>
-                  </View>
-                  <View style={{flex:1}}>
-                  <Text style={{padding:5}}>比特币交易ID</Text>
-                   <Text style={{padding:5}}>2e2r1rt2yu34io5jnbc67sf8bx7gd79svx9gs345d6546fvcb869cbnm897fhg12ffd45gsfs</Text>
-                   <Text style={{padding:5}}>已在区块中确认</Text>
-                   <Text style={{padding:5}}>123095</Text>
-                 </View>
+
+                 {this.state.isHiden ? <View style={{flex:1}}>
+                  <Text style={{padding:5}} onPress={this._Unfoldthecontent.bind(this)}>更多... </Text></View>
+                  : <View>
+                        <Text style={{padding:5}}>比特币交易ID</Text>
+                        <Text style={{padding:5}}>2e2r1rt2yu34io5jnbc67sf8bx7gd79svx9gs345d6546fvcb869cbnm897fhg12ffd45gsfs</Text>
+                        <Text style={{padding:5}}>已在区块中确认</Text>
+                        <Text style={{padding:5}}>123095</Text>
+                    </View>
+
+                 }
+
+
             </View>
 
         );
@@ -94,7 +97,7 @@ class DetailScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        width: 320,
+        width: AppSizes.width,
         paddingLeft:20,
         backgroundColor:'#fff',
         flex:1,

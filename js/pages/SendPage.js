@@ -8,8 +8,10 @@ import {
     TextInput,
     Clipboard,
     AlertIOS,
+    TouchableHighlight
 } from 'react-native';
 //var Toast = require('react-native-toast');
+import {AppSizes, AppComponent} from '../style/index';
 class SendPage extends Component{
 constructor(props) {
         super(props);
@@ -51,7 +53,7 @@ constructor(props) {
      }
     render(){;
         return(
-            <View style={{backgroundColor:'#fff',flex:1,}}>
+            <View style={styles.container}>
             <Text style={{padding:20}}>发送 {this.state.text}</Text>
                  <TextInput
                     style={styles.textinput}
@@ -76,11 +78,12 @@ constructor(props) {
                        placeholder="备注"
                        clearButtonMode='while-editing'
                         />
-                    <Button
-                     style={{padding:20}}
-                     onPress={() =>this.onClick()}
-                     title="发送"
-                    />
+                    <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this.onClick.bind(this)}>
+                        <Text style={styles.btnText}>
+                           发送
+                        </Text>
+                    </TouchableHighlight>
+
             </View>
         );
     }
@@ -91,16 +94,28 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
     },
+    container:{
+        backgroundColor:'#fff',
+        flex:1,
+        width:AppSizes.width,
+    },
     textinput:{
-    height: 30,
-    width:270,
-    paddingLeft:10,
-    marginLeft:20,
-    marginBottom:20,
-    fontSize:14,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius:8
+        height: 35,
+        width:300,
+        paddingLeft:10,
+        marginLeft:40,
+        marginBottom:20,
+        fontSize:15,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius:8
+    },
+    btn: {
+        marginTop:AppSizes.margin_20,
+        width:300,
+    },
+    btnText:{
+         color:"#fff"
     }
 });
 
