@@ -8,9 +8,9 @@ import {
     TouchableHighlight,
     StyleSheet
 } from 'react-native';
-//import QRCode from 'react-native-qrcode';
+import QRCode from 'react-native-qrcode';
 import {AppSizes, AppComponent} from '../style/index';
-//import ReceiveQRCode from '../components/ReceiveQRCode';
+import ReceiveQRCode from '../components/ReceiveQRCode';
 
 class ReceivePage extends Component{
     constructor(props) {
@@ -42,7 +42,7 @@ class ReceivePage extends Component{
         return(
             <View style={styles.container}>
                 <Text style={{padding:20}}>接收二维码</Text>
-
+                <ReceiveQRCode inputShow={this.state.inputShow}/>
                 <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this.onPress.bind(this)}>
                     <Text style={styles.btnText}>
                         申请金额

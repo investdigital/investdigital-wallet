@@ -16,7 +16,6 @@ class DetailScreen extends React.Component {
         super(props);
         this.state = {
             position: 'top',
-            style:{},
             isHiden:true
         }
     }
@@ -24,18 +23,6 @@ class DetailScreen extends React.Component {
         title:'交易详情',
 
     };
-
-//    _setClipboardContent = async () => {
-//          const {params} = this.props.navigation.state;
-//                Clipboard.setString(params.user);
-//                 AlertIOS.alert("已复制")
-////                try {
-////                    var content = await Clipboard.getString();
-////                     AlertIOS.alert("已复制")
-////                } catch (e) {
-////                    AlertIOS.alert({content:e.message});
-////                }
-//            }
      onClick(text, position) {
      console.log(text)
             this.setState({
@@ -45,7 +32,6 @@ class DetailScreen extends React.Component {
         }
 
         getButton(text, position) {
-
              Clipboard.setString(text);
             return(
                 <TouchableHighlight
@@ -85,10 +71,7 @@ class DetailScreen extends React.Component {
                         <Text style={{padding:5}}>已在区块中确认</Text>
                         <Text style={{padding:5}}>123095</Text>
                     </View>
-
                  }
-
-
             </View>
 
         );

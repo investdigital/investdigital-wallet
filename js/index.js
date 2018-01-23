@@ -18,13 +18,19 @@ import GetSetStorage from './utils/GetSetStorage';
 import StartAPPPage from './pages/StartAPPPage';
 import MainScreenNavigator from './components/MainScreenNavigator';
 import RememberMnemonicPage from './pages/RememberMnemonicPage';
+
+import SearchList from './pages/SearchList';
+
+
+
 const TouchWallet = StackNavigator({
 //    Start:{screen:StartAPPPage},
     Home: {screen: MainScreenNavigator},
     Detail:{screen:DetailScreen},
     Keystore:{screen:KeystoreScreen},
     GuideView:{screen:GuideViewScreen},
-    Remember:{screen:RememberMnemonicPage}
+    Remember:{screen:RememberMnemonicPage},
+    SearchList:{screen:SearchList}
     }
 );
 export default TouchWallet;
