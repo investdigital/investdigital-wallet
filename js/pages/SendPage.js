@@ -29,6 +29,8 @@ constructor(props) {
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
+        headerBackTitle:null,
+        headerLeft:null,
     }
 
     onClick(){
