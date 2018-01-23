@@ -20,6 +20,7 @@ class StartAPPPage extends Component {
         Animated.timing(
             this.state.bounceValue, { toValue: 1.2, duration: 1000 }
         ).start();
+//        GetSetStorage.removeStorageAsync('isFrist');
         this.timer = setTimeout(() => {
             GetSetStorage.getStorageAsync('isFrist').then((result) => {
                 if (result == null || result == '') {

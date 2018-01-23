@@ -45,7 +45,7 @@ class GuideViewScreen extends Component{
                     :
                     <View>
                         <Text>keystore</Text>
-                        <TouchableHighlight style={AppComponent.btn} underlayColor="#008AC4"  onPress={() => navigate('Home',{data:'Keystore'})}>
+                        <TouchableHighlight style={AppComponent.btn} underlayColor="#008AC4"  onPress={() => navigate('Remember',{data:'Keystore'})}>
                             <Text style={styles.btnText}>
                                 下一步
                             </Text>
