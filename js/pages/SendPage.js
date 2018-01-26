@@ -8,9 +8,13 @@ import {
     TextInput,
     Clipboard,
     AlertIOS,
-    TouchableHighlight
+    TouchableHighlight,
 } from 'react-native';
-//var Toast = require('react-native-toast');
+var Progress = require('react-native-progress');
+
+// Service
+import { Api } from '../service';
+
 import {AppSizes, AppComponent} from '../style/index';
 class SendPage extends Component{
 constructor(props) {
@@ -19,12 +23,12 @@ constructor(props) {
               text:"",
               num:"",
               tip:"",
+              progress: 0,
             };
     }
     static navigationOptions = {
         title:'发送',
         drawerLabel: '发送',
-        // Note: By default the icon is only shown on iOS. Search the  showIcon option below.
         drawerIcon: ({ tintColor }) => (
             <Image
                 source={require('../images/pfb_tabbar_homepage.png')}
@@ -34,7 +38,24 @@ constructor(props) {
         headerBackTitle:null,
         headerLeft:null,
     }
+    componentDidMount(){
+        this.animate()
+      }
 
+      animate() {
+        var progress = 0;
+        this.setState({ progress });
+        setTimeout(() => {
+          this.setState({ indeterminate: false });
+          setInterval(() => {
+            progress += Math.random()/5;
+            if(progress > 1) {
+              progress = 1;
+            }
+            this.setState({ progress });
+          }, 500);
+        }, 1500);
+      }
     onClick(){
      const text = this.state.text;
      const num = this.state.num;
@@ -78,6 +99,11 @@ constructor(props) {
                        placeholder="备注"
                        clearButtonMode='while-editing'
                         />
+                        <Progress.Bar
+                                              style={styles.progress}
+                                              progress={this.state.progress}
+                                              indeterminate={this.state.indeterminate}
+                                            />
                     <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this.onClick.bind(this)}>
                         <Text style={styles.btnText}>
                            发送
@@ -116,7 +142,10 @@ const styles = StyleSheet.create({
     },
     btnText:{
          color:"#fff"
-    }
+    },
+    progress: {
+        margin: 10,
+      },
 });
 
 export default SendPage

@@ -33,4 +33,5 @@ export default {
     margin_20:20,
     margin_25:25,
     margin_30:30,
+    margin_40:40,
 };

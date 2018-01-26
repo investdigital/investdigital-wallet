@@ -24,7 +24,7 @@ import SearchList from './pages/SearchList';
 
 
 const TouchWallet = StackNavigator({
-//    Start:{screen:StartAPPPage},
+    Start:{screen:StartAPPPage},
     Home: {screen: MainScreenNavigator},
     Detail:{screen:DetailScreen},
     Keystore:{screen:KeystoreScreen},

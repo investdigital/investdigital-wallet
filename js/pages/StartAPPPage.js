@@ -20,13 +20,12 @@ class StartAPPPage extends Component {
         Animated.timing(
             this.state.bounceValue, { toValue: 1.2, duration: 1000 }
         ).start();
-//        GetSetStorage.removeStorageAsync('isFrist');
         this.timer = setTimeout(() => {
-            GetSetStorage.getStorageAsync('isFrist').then((result) => {
+            GetSetStorage.getStorageAsync('isFirst').then((result) => {
                 if (result == null || result == '') {
                     //第一次启动
                     this.props.navigation.navigate('GuideView');
-                    GetSetStorage.setStorageAsync('isFrist', 'true');
+                    GetSetStorage.setStorageAsync('isFirst', 'true');
                 } else {
                     //第二次启动s
                     this.props.navigation.navigate('Home');

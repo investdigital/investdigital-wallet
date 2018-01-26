@@ -16,13 +16,20 @@ class GuideViewScreen extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            inputShow:true
+            inputShow:true,
+            password: '',
+            mnemonic:'oppose receive bracket keen blossom fuel ostrich soup life memory elbow field'
         };
     }
     showMnemonic(){
-        this.setState({
-            inputShow:false
-        })
+        if(this.state.password === ''){
+            alert("请输入密码")
+        }
+        else{
+            this.setState({
+                inputShow:false
+            });
+        }
     }
     render() {
         const {navigate} = this.props.navigation;
@@ -35,6 +42,8 @@ class GuideViewScreen extends Component{
                     style={styles.input}
                     keyboardType='numeric'
                     placeholder="密码"
+                    secureTextEntry
+                    onChangeText={(password) => this.setState({password})}
                 />
                         <TouchableHighlight style={[AppComponent.btn]} underlayColor="#008AC4"  onPress={this.showMnemonic.bind(this)}>
                             <Text style={styles.btnText}>
@@ -44,8 +53,9 @@ class GuideViewScreen extends Component{
                     </View>
                     :
                     <View>
-                        <Text>keystore</Text>
-                        <TouchableHighlight style={AppComponent.btn} underlayColor="#008AC4"  onPress={() => navigate('Remember',{data:'Keystore'})}>
+                        <Text style={styles.mnemonicTitle}>助记词（请牢记你的助记词）</Text>
+                        <Text style={styles.mnemonic}>{this.state.mnemonic}</Text>
+                        <TouchableHighlight style={[AppComponent.btn,styles.btn]} underlayColor="#008AC4"  onPress={() => navigate('Remember',{data:this.state.mnemonic})}>
                             <Text style={styles.btnText}>
                                 下一步
                             </Text>
@@ -68,6 +78,12 @@ const styles = StyleSheet.create({
         height: 22,
         width: 22,
         resizeMode: 'contain'
+    },
+    mnemonic:{
+        width:AppSizes.screen.widthThreeQuarters
+    },
+    mnemonicTitle:{
+        marginBottom:AppSizes.margin_20,
     },
     input: {
         width: AppSizes.screen.widthThreeQuarters,

@@ -3,32 +3,109 @@ import  {
     Image,
     TextInput,
     View,
+    Text,
     Platform,
-    StyleSheet
+    StyleSheet,
+    TouchableHighlight,
+    ScrollView
 } from 'react-native';
 
+import {AppSizes, AppComponent} from '../style/index';
 
-//export 因为要在其他类中使用
+// Service
+import { Api } from '../service';
+
 export default class SearchList extends Component{
-
+   constructor(props) {
+           super(props);
+            this.state = {
+              data:{
+                list1:[],
+                list2:[],
+              },
+               status:0
+           };
+       }
  static navigationOptions = ({ navigation }) => ({
     title: '搜索订单',
   });
+
+  changeOpen(status){
+   const lastStatus = this.state.status;
+  console.log(status)
+  if(lastStatus === status){
+    this.setState({
+        status:0,
+        text:""
+      })
+    }else{
+    this.setState({
+            status
+        })
+    }
+    const orderStatus = this.state.status;
+    const inputText = this.state.text;
+    //数据请求的方法
+  }
     render(){
         return (
-           <View style={styles.container}>
-            <View style={styles.searchBox}>
-                 <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.searchIcon}/>
-                 <TextInput style={styles.inputText}
-                            keyboardType='web-search'
-                            placeholder='搜索订单' />
+         <View>
+             <View style={styles.container}>
+                <View style={styles.searchBox}>
+                     <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.searchIcon}/>
+                     <TextInput style={styles.inputText}
+                                onChangeText={(text) => this.setState({text})}
+                                value={this.state.text}
+                                keyboardType='web-search'
+                                placeholder='搜索订单'
+                                clearButtonMode='while-editing'/>
+                      <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.voiceIcon}/>
+                </View>
+                <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.scanIcon}/>
+             </View>
+             <View style={styles.btnlist}>
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 1 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                  this.changeOpen(1)
+                  }}>
+                  <Text style={[styles.btnText,{color:this.state.status === 1 ?'#fff':'#329aff'}]}>
+                       已完成
+                  </Text>
+                </TouchableHighlight>
 
-                  <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.voiceIcon}/>
-            </View>
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 2 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                   this.changeOpen(2)
+                    }}>
+                  <Text style={[styles.btnText,{color:this.state.status === 2 ?'#fff':'#329aff'}]}>
+                     未完成
+                   </Text>
+                </TouchableHighlight>
 
-            <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.scanIcon}/>
-
-           </View>
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 3 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                  this.changeOpen(3)
+                  }}>
+                  <Text style={[styles.btnText,{color:this.state.status === 3 ?'#fff':'#329aff'}]}>
+                     已发送
+                   </Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 4 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                   this.changeOpen(4)
+                  }}>
+                   <Text style={[styles.btnText,{color:this.state.status === 4 ?'#fff':'#329aff'}]}>
+                      未发送
+                   </Text>
+                </TouchableHighlight>
+             </View>
+             <View style={styles.list}>
+                <ScrollView>
+                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>111111111111111111111111111111111111111111111111</Text>
+                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}} style={styles.boxshaow}>2222222222222222222222222222222222222222222222222</Text>
+                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>111111111111111111111111111111111111111111111111</Text>
+                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}} style={styles.boxshaow}>2222222222222222222222222222222222222222222222222</Text>
+                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>111111111111111111111111111111111111111111111111</Text>
+                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}} style={styles.boxshaow}>2222222222222222222222222222222222222222222222222</Text>
+                </ScrollView>
+             </View>
+          </View>
         )
     }
 }
@@ -43,11 +120,6 @@ const styles = StyleSheet.create({
         height: Platform.OS === 'ios' ? 68 : 48,   // 处理iOS状态栏
         backgroundColor: '#329AFF',
         alignItems: 'center'  // 使元素垂直居中排布, 当flexDirection为column时, 为水平居中
-    },
-    logo: {//图片logo
-        height: 24,
-        width: 64,
-        resizeMode: 'stretch'  // 设置拉伸模式
     },
     searchBox:{//搜索框
       height:30,
@@ -82,4 +154,41 @@ const styles = StyleSheet.create({
         width: 26.7,
         resizeMode: 'stretch'
     },
+    btnlist:{
+       flexDirection: 'row',   // 水平排布
+       flex:1,
+       justifyContent: 'space-around',
+       marginBottom:30,
+    },
+    btn: {
+         marginTop:AppSizes.margin_40,
+         width:60,
+         height: 30,
+         alignItems: 'center',
+        justifyContent: 'center',
+         alignSelf: 'center',
+         backgroundColor:'#fff',
+         borderRadius:10,
+        },
+    btnText:{
+             color:"#329aff"
+        },
+        list:{
+//                backgroundColor:'#fff',
+                  justifyContent:'center',
+                  alignItems:'center'
+            },
+        boxshaow :{
+                width:300,
+                   height:60,
+                   backgroundColor:'#fff',
+                   marginTop:20,
+                   padding:10,
+                   alignItems:'center',
+                   elevation: 50,
+                   shadowColor:'#ADADAD',
+                   shadowOpacity:0.4,
+                   shadowRadius:5,
+                   shadowOffset : {width:0, height:0},
+                },
 });

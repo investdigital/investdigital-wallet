@@ -24,7 +24,6 @@ class DetailScreen extends React.Component {
 
     };
      onClick(text, position) {
-     console.log(text)
             this.setState({
                 position: position,
             })
@@ -43,7 +42,6 @@ class DetailScreen extends React.Component {
             )
         }
     _Unfoldthecontent(){
-    console.log(this.state.isHiden)
        this.setState({isHiden: false})
     }
 
@@ -51,7 +49,7 @@ class DetailScreen extends React.Component {
         const {params} = this.props.navigation.state;
         return (
             <View style={styles.container}>
-                <Text style={{padding:5,marginTop:20}}>2017年11月20日 下午3:30</Text>
+                <Text style={{padding:5,marginTop:20}} onPress={() => { this.props.navigation.navigate(`https://etherscan.io/tx/0x4cf723d7823454e88f985ae5d2722618540b606094d7c314748c7235496c33b7`)}}>2017年11月20日 下午3:30</Text>
                 <Text style={{padding:5}} onPress={this._setClipboardContent}>已接收 idt {params.user}</Text>
                  <Text style={{padding:5}}>在 {params.address}</Text>
                  <Text style={{padding:5}}>状态 : 完成</Text>
