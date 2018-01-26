@@ -13,7 +13,6 @@ import ModalDropdown from './ModalDropdown';
 class Banner extends Component{
 constructor(props) {
     super(props);
-
     this.state = {
       dropdown_4_options: null,
       dropdown_4_defaultValue: 'loading...',

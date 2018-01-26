@@ -20,7 +20,7 @@ class SendPage extends Component{
         headerBackTitle:null,
         headerLeft:null
     };
-    render(){;
+    render(){
         return(
             <View style={{backgroundColor:'#fff',flex:1}}>
                 <Text style={{padding:20}}>发送</Text>

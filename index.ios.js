@@ -11,6 +11,6 @@ import {
   Text,
   View
 } from 'react-native';
-import './shim.js'
+import './shim.js';
 import TouchWallet from './js/index';
 AppRegistry.registerComponent('TouchWallet', () => TouchWallet);

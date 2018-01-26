@@ -25,6 +25,7 @@
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.3",
     "react-native-crypto": "^2.1.2",
+    "react-native-easy-toast": "^1.0.9",
     "react-native-http": "tradle/react-native-http#834492d",
     "react-native-level-fs": "^3.0.0",
     "react-native-linear-gradient": "^2.4.0",

@@ -21,7 +21,7 @@ class ReceivePage extends Component{
     }
     static navigationOptions = {
         title:'接收',
-        drawerLabel: '我的',
+        drawerLabel: '接收',
         // Note: By default the icon is only shown on iOS. Search the  showIcon option below.
         drawerIcon: ({ tintColor }) => (
             <Image
@@ -35,13 +35,12 @@ class ReceivePage extends Component{
     onPress(){
         this.setState({
             inputShow:true
-        })
-        console.log(1);
+        });
     }
     render(){
         return(
             <View style={styles.container}>
-                <Text style={{padding:20}}>接收二维码</Text>
+                <Text style={[styles.title,styles.btn]}>TouchWallet</Text>
                 <ReceiveQRCode inputShow={this.state.inputShow}/>
                 <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this.onPress.bind(this)}>
                     <Text style={styles.btnText}>
@@ -61,6 +60,10 @@ const styles = StyleSheet.create({
     icon: {
         width: 24,
         height: 24,
+    },
+    title:{
+        fontSize:25,
+        color:'#329aff',
     },
     btn: {
         marginTop:AppSizes.margin_20,
