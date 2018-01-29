@@ -41,7 +41,6 @@ constructor(props) {
     componentDidMount(){
         this.animate()
       }
-
       animate() {
         var progress = 0;
         this.setState({ progress });
@@ -72,7 +71,7 @@ constructor(props) {
         alert(' 发送成功')
       }
      }
-    render(){;
+    render(){
         return(
             <View style={styles.container}>
             <Text style={{padding:20}}>发送 {this.state.text}</Text>

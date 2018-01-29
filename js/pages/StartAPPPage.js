@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet,Animated,Dimensions } from 'react-native';
 import GetSetStorage from '../utils/GetSetStorage';
-
+import Toast, {DURATION} from 'react-native-easy-toast';
 const splashImg = require('../images/pfb_tabbar_homepage.png');//加载图片
-
 const { width, height } = Dimensions.get('window');
-// create a component
 class StartAPPPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {  //这是动画效果
+        this.state = {
             bounceValue: new Animated.Value(1)
         };
     }
@@ -20,6 +18,7 @@ class StartAPPPage extends Component {
         Animated.timing(
             this.state.bounceValue, { toValue: 1.2, duration: 1000 }
         ).start();
+        GetSetStorage.removeStorageAsync('isFirst');
         this.timer = setTimeout(() => {
             GetSetStorage.getStorageAsync('isFirst').then((result) => {
                 if (result == null || result == '') {
@@ -34,7 +33,6 @@ class StartAPPPage extends Component {
                 console.log('系统异常' + error);
             });
         }, 1000);
-
     }
     componentWillUpdate = () => {
         clearTimeout(this.timer);
@@ -49,11 +47,10 @@ class StartAPPPage extends Component {
                 }}
                 source={splashImg}
             />
+
         );
     }
 }
-
-// define your styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -63,5 +60,4 @@ const styles = StyleSheet.create({
     },
 });
 
-//make this component available to the app
 export default StartAPPPage;

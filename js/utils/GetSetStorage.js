@@ -1,7 +1,6 @@
 import {
     AsyncStorage,
 } from 'react-native';
-
 class GetSetStorage {
     /**
      * 异步保存

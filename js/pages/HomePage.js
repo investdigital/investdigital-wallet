@@ -73,16 +73,16 @@ class HomePage extends Component{
                  <View style={styles.header}>
                      <Text style={styles.title} >bread
                         <Text style={styles.title1}> (Testnet)</Text>
-                        <Text style={styles.title,styles.search} onPress={() => { this.props.navigation.navigate('SearchList')}}> 搜索 {'\n'}</Text>
+                        <Text style={[styles.title,styles.search]} onPress={() => { this.props.navigation.navigate('SearchList')}}> 搜索 {'\n'}</Text>
                      </Text>
 
                  </View>
-                  {this.state.isChange ? <View style={styles.header,styles.toggle}>
+                  {this.state.isChange ? <View style={[styles.header,styles.toggle]}>
                                            <Text style={styles.title2}  onPress={this.onClick.bind(this)}>b{money}
                                               <Text style={styles.title3}> = ¥{rmb}</Text>
                                             </Text>
                                          </View>
-                   : <View style={styles.header,styles.toggle}>
+                   : <View style={[styles.header,styles.toggle]}>
                        <Text style={styles.title2}  onPress={this.onClick.bind(this)}>¥{rmb}
                           <Text style={styles.title3}> = b{money}</Text>
                        </Text>

@@ -4,61 +4,104 @@ import {
     Image,
     View,
     Text,
-    TextInput,
     TouchableHighlight,
-    StyleSheet
+    TextInput,
+    Alert,
+    StyleSheet,
+    KeyboardAvoidingView
 } from 'react-native';
+import Toast, {DURATION} from 'react-native-easy-toast';
+// Styles
 import {AppSizes, AppComponent} from '../style/index';
 class RememberMnemonicPage extends Component{
-    // static navigationOptions = {
-    //     title:'助记词检验',
-    // };
     constructor(props) {
         super(props);
         this.state = {
+            question1Index1:'',
+            question1Index2:'',
+            questionTitle1:'',
+            questionTitle2:'',
             question1:'',
-            question2:''
+            question2:'',
         };
     }
+    componentDidMount(){
+        const arr = ["一","二","三","四","五","六","七","八","九","十","十一","十二"];
+        let index1 = Math.floor((Math.random()*arr.length));
+        console.log(arr);
+        this.setState({
+            question1Index1:index1,
+            questionTitle1:arr[index1],
+        });
+        arr.splice(index1,1);
+        console.log(arr);
+        let index2 = Math.floor((Math.random()*arr.length));
+        console.log(index2);
+        this.setState({
+            question1Index2:index2,
+            questionTitle2:arr[index2],
+        });
+    }
     handleRemember(val){
+        console.log(val);
+        let index1=this.state.question1Index1;
+        let index2=this.state.question1Index2;
         let question1=this.state.question1;
-        let question2=this.state.question2;
-        if(question1 == val[2]){
-            if(question2 == val[11]){
-                this.props.navigation.navigate('Home',{data:'Keystore'})
+        let question2 =this.state.question2;
+        console.log(val);
+        console.log(index1,question1,index2,question2);
+        if(question1 && question2){
+            if(val[index1]== question1){
+                val.splice(index1,1);
+                if(val[index2]== question2){
+                    this.props.navigation.navigate('Home')
+                }
+                else{
+                    this.refs.toast.show('请核对问题二 ');
+                }
+            }else {
+                this.refs.toast.show('请核对问题一');
+                // Alert.alert("请核对问题一");
             }
-            else{
-                alert('请核对问题二输入是否正确');
-            }
+
         }else{
-            alert('请核对问题一输入是否正确');
+            this.refs.toast.show('请输入正确答案');
+            // Alert.alert('请输入正确答案');
         }
     }
     render(){
         const {params} = this.props.navigation.state;
-        const mnemonicData=params.data.split(' ');
+        let mnemonic=(params.data).split(' ');
         return(
-            <View style={styles.container}>
-                <View>
-                    <Text>请输入助记词的第三个单词</Text>
-                    <TextInput
-                        style={styles.input}
-                        autoCapitalize='none'
-                        onChangeText={(question1) => this.setState({question1})}
-                    />
-                    <Text>请输入助记词的最后一个单词</Text>
-                    <TextInput
-                        style={styles.input}
-                        autoCapitalize='none'
-                        onChangeText={(question2) => this.setState({question2})}
-                    />
-                    <TouchableHighlight style={[AppComponent.btn]} underlayColor="#008AC4" onPress={this.handleRemember.bind(this,mnemonicData)}>
-                        <Text style={styles.btnText}>
-                            确定
-                        </Text>
-                    </TouchableHighlight>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior="padding"
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>助记词真的记住了吗？</Text>
+                    <View>
+                        <Text>请输入第{this.state.questionTitle1}个单词</Text>
+                        <TextInput
+                            style={styles.input}
+                            autoCapitalize="none"
+                            onChangeText={(question1)=>{this.setState({question1})}}
+
+                        />
+                        <Text>请输入第{this.state.questionTitle2}个单词</Text>
+                        <TextInput
+                            style={styles.input}
+                            autoCapitalize="none"
+                            onChangeText={(question2)=>{this.setState({question2})}}
+                        />
+                        <TouchableHighlight style={[AppComponent.btn]} underlayColor="#008AC4"  onPress={this.handleRemember.bind(this,mnemonic)}>
+                            <Text style={styles.btnText}>
+                                确定
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                    <Toast position='top' ref="toast"/>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -68,7 +111,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        margin:'auto',
+        height: AppSizes.screen.height-60,
+
     },
     icon: {
         height: 22,
@@ -88,9 +132,13 @@ const styles = StyleSheet.create({
     btn: {
         marginTop:AppSizes.margin_20,
     },
+    title:{
+        fontSize:25,
+        color:'#329aff',
+        marginBottom:AppSizes.margin_20*2
+    },
     btnText:{
         color:"#fff"
     }
 });
-
 export default RememberMnemonicPage;

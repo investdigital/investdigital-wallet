@@ -8,6 +8,7 @@ import {
     TextInput,
     StyleSheet
 } from 'react-native';
+import GetSetStorage from '../utils/GetSetStorage';
 import QRCode from 'react-native-qrcode';
 import {AppSizes} from '../style/index';
 
@@ -17,28 +18,46 @@ export default class ReceiveQRCode extends Component{
         this.state = {
             loading: false,
             firstLoader: true,
-            text: '',
+            text:'',
+            address:''
         };
     }
+    componentWillMount() {
+        GetSetStorage.getStorageAsync('address').then((result)=>{
+            this.setState({
+                address:result
+            })
+        })
+    }
     render() {
-        console.log(this.props.inputShow);
         return (
             <View>
-                {!this.props.inputShow ? <Text></Text> : <TextInput
+                {!this.props.inputShow ? <Text></Text> :
+                    <View>
+                    <TextInput
                     style={styles.input}
                     onChangeText={(text) => this.setState({text: text})}
                     value={this.state.text}
                     keyboardType='numeric'
-                    placeholder="金额"
-                />}
-
-                <View style={styles.code}>
+                    placeholder="ETH数量"
+                />
+                    </View>
+                        }
+                {this.state.text ? <View style={styles.code}>
                     <QRCode
-                        value={`http://facebook.github.io/react-native/${this.state.text}`}
+                        value={`${this.state.address}?amount=${this.state.text}`}
                         size={AppSizes.screen.widthHalf}
                         bgColor='black'
                         fgColor='white'/>
-                </View>
+                </View> :<View style={styles.code}>
+                    <QRCode
+                        value={`${this.state.address}`}
+                        size={AppSizes.screen.widthHalf}
+                        bgColor='black'
+                        fgColor='white'/>
+                </View>}
+
+
             </View>
         );
     }
