@@ -8,23 +8,31 @@ import {
     TextInput,
     Clipboard,
     AlertIOS,
+    PanResponder,
     TouchableHighlight,
 } from 'react-native';
-var Progress = require('react-native-progress');
 
 // Service
 import { Api } from '../service';
+
+import GetSetStorage from '../utils/GetSetStorage';
+
+import * as Progress from 'react-native-progress';
+import Tx from 'ethereumjs-tx';
 
 import {AppSizes, AppComponent} from '../style/index';
 class SendPage extends Component{
 constructor(props) {
         super(props);
          this.state = {
-              text:"",
-              num:"",
-              tip:"",
-              progress: 0,
-            };
+             text:"",
+             num:"",
+             tip:"",
+             progress: 0,
+             gasLimit:'100000',
+             gasPrice:'20',
+             gas:0.002
+         };
     }
     static navigationOptions = {
         title:'发送',
@@ -37,28 +45,83 @@ constructor(props) {
         ),
         headerBackTitle:null,
         headerLeft:null,
+    };
+    componentWillMount() {
+
+        this._panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onMoveShouldSetPanResponder: (evt, gestureState) => true,
+            onPanResponderGrant: (evt, gestureState) => {
+                this._progress = this.state.progress;
+                this._length = parseFloat((this._progress + gestureState.dx/200).toFixed(2));
+                if(this._length<=0){
+                    this._length=0
+                }
+                else if(this._length>1){
+                    this._length=1
+                }
+                //手指开始
+            },
+            onPanResponderMove: (evt, gestureState) => {
+                this._length = parseFloat((this._progress + gestureState.dx/200).toFixed(2));
+                if(this._length<=0){
+                    this._length=0
+                }
+                else if(this._length>1){
+                    this._length=1
+                }
+                this.setState({
+                    progress: this._length,
+                    gasPrice:parseInt((this._length)*80)+20,
+                    gas:(parseInt((this._length)*80)+20)*this.state.gasLimit/1e9
+                })
+            },
+            onPanResponderTerminationRequest: (evt, gestureState) => true,
+            onPanResponderRelease: (evt, gestureState) => {
+                //手指离开屏幕
+                this.setState({
+                    progress: this._length,
+                    gasPrice:parseInt((this._length)*80)+20,
+                    gas:(parseInt((this._length)*80)+20)*this.state.gasLimit/1e9
+                });
+            },
+            onShouldBlockNativeResponder: (evt, gestureState) => {
+                // Returns whether this component should block native components from becoming the JS
+                // responder. Returns true by default. Is currently only supported on android.
+                return true;
+            },
+        });
+    }
+    changeFormat(val){
+        let data =parseInt(val).toString(16);
+        if(data%2 == 0){
+            return "0x"+data;
+        }else{
+            return "0x0"+data;
+        }
     }
     componentDidMount(){
-        this.animate()
-      }
-      animate() {
-        var progress = 0;
-        this.setState({ progress });
-        setTimeout(() => {
-          this.setState({ indeterminate: false });
-          setInterval(() => {
-            progress += Math.random()/5;
-            if(progress > 1) {
-              progress = 1;
-            }
-            this.setState({ progress });
-          }, 500);
-        }, 1500);
+//        this.animate()
+      //      APP初始化时生成的钱包地址
+//       const address =  GetSetStorage.getStorageAsync('address')
+//      const address = '0x0127eb89fF5bdD96af11b7e4e01cda03F22b28e1';
+//      //数据请求方式...
+//        Api.getNonce(address).then(data => {
+//        console.log('-----')
+//          console.log(data.data);
+//           this.setState({
+//           nonce:data.data
+//         })
+//        }).catch(err => {
+//          console.log(err);
+//        })
       }
     onClick(){
      const text = this.state.text;
      const num = this.state.num;
      const tip = this.state.tip;
+
+
 
      if(text === '' || num === '' ){
         if(text === ''){
@@ -67,11 +130,75 @@ constructor(props) {
            alert('金额不能为空')
         }
       }else{
-      //数据请求方式...
-        alert(' 发送成功')
+
+//        Api.sendTransaction().then(data => {
+//          console.log('-----')
+//         console.log(data.data);
+////         this.setState({
+////           nonce:data.data
+////          })
+//         }).catch(err => {
+//          console.log(err);
+//        })
+       }
+
+         GetSetStorage.getStorageAsync('address').then((result) => {
+             let address=result;
+             console.log("address"+address);
+             Api.getNonce({address}).then(data => {
+                 let nonce=data.data;
+                 console.log('nonce'+nonce);
+                 if(data.status==1){
+                     GetSetStorage.getStorageAsync('privateKey').then((result) => {
+                         const privateKey=result;
+                         console.log(privateKey);
+                         let key =new Buffer(privateKey, 'hex');
+                         let rawTx = {
+                             nonce: nonce,
+                             gasPrice: this.changeFormat(this.state.gasPrice),
+                             gasLimit: this.changeFormat(this.state.gasLimit),
+                             from: address,
+                             to: this.state.text,//the to address
+                             value: this.changeFormat(this.state.num),//the amount of ether sent
+                         };
+                         let tx = new Tx(rawTx);
+                         tx.sign(key);
+                         let serializedTx = tx.serialize();
+                         let txStr = "0x" + serializedTx.toString("hex");
+                         Api.sendETH({txStr}).then((data)=>{
+                             console.log(data);
+                            if(data.status==1){
+                                alert("交易成功");
+                                let item1 ={txId:data.data,from:address, to:this.state.text, time:new Date().toLocaleString(),amount:this.state.num};
+                                GetSetStorage.getStorageAsync('ethList').then((result) => {
+                                    if (result == null || result == '') {
+                                        var ethList = new Object();
+                                        let array=[];
+                                        array.unshift(item1);
+                                        ethList.data=array;
+                                        GetSetStorage.setStorageAsync('ethList', JSON.stringify(ethList));
+                                    }else{
+                                        let ethList= JSON.parse(result);
+                                        ethList.data.unshift(item1);
+                                        GetSetStorage.setStorageAsync('ethList', JSON.stringify(ethList));
+                                    }
+                                })
+                            }
+                            else{
+                                alert("交易失败")
+                            }
+                         })
+                     });
+                 }
+             }).catch(err => {
+                 console.log(err);
+             });
+         });
+
       }
      }
     render(){
+        const {navigate} = this.props.navigation;
         return(
             <View style={styles.container}>
             <Text style={{padding:20}}>发送 {this.state.text}</Text>
@@ -98,11 +225,24 @@ constructor(props) {
                        placeholder="备注"
                        clearButtonMode='while-editing'
                         />
-                        <Progress.Bar
-                                              style={styles.progress}
-                                              progress={this.state.progress}
-                                              indeterminate={this.state.indeterminate}
-                                            />
+                    <View style={styles.progress}>
+                        <View style={styles.progressBar} {...this._panResponder.panHandlers}>
+                            <Text>{this.state.gas}</Text>
+                            <Progress.Bar
+                                progress={this.state.progress}
+                                width={AppSizes.screen.widthThreeQuarters-18}
+                            />
+                        </View>
+                        <TouchableHighlight underlayColor="#008AC4" onPress={() => navigate('CostMiner')}>
+                            <Text style={styles.btnText}>
+                                <Image
+                                    source={require('../images/question.jpg')}
+                                    style={{width: 18, height: 18}}
+                                />
+                            </Text>
+
+                        </TouchableHighlight>
+                    </View>
                     <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this.onClick.bind(this)}>
                         <Text style={styles.btnText}>
                            发送
@@ -122,6 +262,7 @@ const styles = StyleSheet.create({
     container:{
         backgroundColor:'#fff',
         flex:1,
+        alignItems: 'center',
         width:AppSizes.width,
     },
     textinput:{
@@ -142,9 +283,14 @@ const styles = StyleSheet.create({
     btnText:{
          color:"#fff"
     },
-    progress: {
-        margin: 10,
-      },
-});
+    progress:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems:"flex-end"
+    },
+    progressBar:{
 
+    }
+});
 export default SendPage
+

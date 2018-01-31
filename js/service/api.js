@@ -38,12 +38,32 @@ export default class Api {
   static getAllPrice() {
       return fetchService(`${btcApi}/getAllPrice`);
      }
+    //获取nonce
+   static getNonce({address}){
+       return fetchService(`${baseApi}/getNonce/${address}`,{method: "GET"});
+   }
+    static sendETH({txStr}){
+        let formData = new FormData();
+        formData.append("tx",txStr);
+        return fetchService(`${baseApi}/sendTx`,{method: "POST",body: formData});
+    }
 
-   // 获取 首页列表
-//    static getOrderList(order) {
-//      const queryParams = order ? `?order=${order}` : '';
-//      return fetchService(`${baseApi}/article${queryParams}`);
-//    }
+     // 获取 NONCE
+     static getNonce(address){
+//     console.log(address);
+         return fetchService(`${baseApi}/getNonce/${address}`);
+        }
+        //  发起交易 获取交易ID
+//    static sendTransaction(){
+   //  console.log();
+//      return fetchService(`${baseApi}/sendTx`);
+//           }
+
+//    获取 首页列表
+    static getOrderList(order) {
+      const queryParams = order ? `?order=${order}` : '';
+      return fetchService(`${baseApi}/article${queryParams}`);
+    }
 //
 //  // 获取order订单详情
 //  static getOrderDetail(order_id) {

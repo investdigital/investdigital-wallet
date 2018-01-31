@@ -14,6 +14,9 @@ import lightwallet from 'eth-lightwallet';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import {AppSizes, AppComponent} from '../style/index';
 import GetSetStorage from '../utils/GetSetStorage';
+
+// Service
+import { Api } from '../service';
 class GuideViewScreen extends Component{
     static navigationOptions={
         header:null
@@ -26,6 +29,16 @@ class GuideViewScreen extends Component{
             mnemonic:lightwallet.keystore.generateRandomSeed()
         };
     }
+
+//           componentDidMount(){
+//             Api.getAllPrice().then(data => {
+//             const eth_sudt = data.eth_usdt
+//              GetSetStorage.setStorageAsync('price', eth_usdt);
+//                    }).catch(err => {
+//                       console.log(err);
+//                    })
+//            }
+
     showMnemonic(){
         if(this.state.password === ''){
             alert("请输入密码")
@@ -34,7 +47,6 @@ class GuideViewScreen extends Component{
             this.setState({
                 inputShow:false
             });
-
         };
     }
     showMnemonic(){
