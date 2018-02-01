@@ -21,10 +21,10 @@ import CostMinerPage from './pages/CostMinerPage';
 
 import SearchList from './pages/SearchList';
 
-
+import ScrollViewItem from './pages/ScrollViewItem';
 
 const TouchWallet = StackNavigator({
-//    Start:{screen:StartAPPPage},
+    Start:{screen:StartAPPPage},
     Home: {screen: MainScreenNavigator},
     Detail:{screen:DetailScreen},
     CostMiner:{screen:CostMinerPage},
@@ -32,6 +32,7 @@ const TouchWallet = StackNavigator({
     GuideView:{screen:GuideViewScreen},
     Remember:{screen:RememberMnemonicPage},
     SearchList:{screen:SearchList},
+    ScrollViewItem:{screen:ScrollViewItem}
     }
 );
 export default TouchWallet;

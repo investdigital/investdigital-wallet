@@ -15,6 +15,9 @@ import {AppSizes, AppComponent} from '../style/index';
 // Service
 import { Api } from '../service';
 
+//本地存取
+import GetSetStorage from '../utils/GetSetStorage';
+
 export default class SearchList extends Component{
    constructor(props) {
            super(props);
@@ -46,6 +49,13 @@ export default class SearchList extends Component{
     const orderStatus = this.state.status;
     const inputText = this.state.text;
     //数据请求的方法
+
+    GetSetStorage.getStorageAsync('ethList').then((result) => {
+         console.log(JSON.parse(result).data)
+         this.setState({
+            details : JSON.parse(result).data
+       })
+   })
   }
     render(){
         return (
@@ -59,16 +69,16 @@ export default class SearchList extends Component{
                                 keyboardType='web-search'
                                 placeholder='搜索订单'
                                 clearButtonMode='while-editing'/>
-                      <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.voiceIcon}/>
+
                 </View>
-                <Image source={require('../images/pfb_tabbar_homepage.png')} style={styles.scanIcon}/>
+                <Text style={{color:'#fff'}} onPress={() => { this.props.navigation.navigate('Home')}}> 取消</Text>
              </View>
              <View style={styles.btnlist}>
                 <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 1 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
                   this.changeOpen(1)
                   }}>
                   <Text style={[styles.btnText,{color:this.state.status === 1 ?'#fff':'#329aff'}]}>
-                       已完成
+                       发送
                   </Text>
                 </TouchableHighlight>
 
@@ -76,7 +86,7 @@ export default class SearchList extends Component{
                    this.changeOpen(2)
                     }}>
                   <Text style={[styles.btnText,{color:this.state.status === 2 ?'#fff':'#329aff'}]}>
-                     未完成
+                     确认中
                    </Text>
                 </TouchableHighlight>
 
@@ -84,14 +94,14 @@ export default class SearchList extends Component{
                   this.changeOpen(3)
                   }}>
                   <Text style={[styles.btnText,{color:this.state.status === 3 ?'#fff':'#329aff'}]}>
-                     已发送
+                     已完成
                    </Text>
                 </TouchableHighlight>
                 <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 4 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
                    this.changeOpen(4)
                   }}>
                    <Text style={[styles.btnText,{color:this.state.status === 4 ?'#fff':'#329aff'}]}>
-                      未发送
+                      失败
                    </Text>
                 </TouchableHighlight>
              </View>

@@ -27,7 +27,7 @@ class DetailScreen extends React.Component {
             this.setState({
                 position: position,
             })
-            this.refs.toast.show('已复制到剪切板');
+            this.refs.toast.show('已复制');
         }
 
         getButton(text, position) {
@@ -47,25 +47,27 @@ class DetailScreen extends React.Component {
 
     render() {
         const {params} = this.props.navigation.state;
+
+//        onPress={() => { this.props.navigation.navigate(`https://etherscan.io/tx/0x4cf723d7823454e88f985ae5d2722618540b606094d7c314748c7235496c33b7`)}}
         return (
             <View style={styles.container}>
-                <Text style={{padding:5,marginTop:20}} onPress={() => { this.props.navigation.navigate(`https://etherscan.io/tx/0x4cf723d7823454e88f985ae5d2722618540b606094d7c314748c7235496c33b7`)}}>2017年11月20日 下午3:30</Text>
-                <Text style={{padding:5}} onPress={this._setClipboardContent}>已接收 idt {params.user}</Text>
-                 <Text style={{padding:5}}>在 {params.address}</Text>
+                <Text style={{padding:5,marginTop:20}}>{params.time}</Text>
+                <Text style={{padding:5}} onPress={this._setClipboardContent}>已接收 idt </Text>
+                 <Text style={{padding:5}}>在 {params.from}</Text>
                  <Text style={{padding:5}}>状态 : 完成</Text>
                  <Text style={{padding:5}}>备忘录 : </Text>
                  <Text style={{padding:5}}>金额 : </Text>
                  <Text style={{padding:5}}>期初余额 : B0</Text>
                  <Text style={{padding:5}}>期末余额 : B2,000 </Text>
                  <Text style={{padding:5}}>已在此地址接收 </Text>
-                 {this.getButton(params.address, 'top', DURATION.LENGTH_SHORT)}
+                 {this.getButton(params.to, 'top', DURATION.LENGTH_SHORT)}
                  <Toast ref="toast" position={this.state.position}/>
 
                  {this.state.isHiden ? <View style={{flex:1}}>
                   <Text style={{padding:5}} onPress={this._Unfoldthecontent.bind(this)}>更多... </Text></View>
                   : <View>
                         <Text style={{padding:5}}>比特币交易ID</Text>
-                        <Text style={{padding:5}}>2e2r1rt2yu34io5jnbc67sf8bx7gd79svx9gs345d6546fvcb869cbnm897fhg12ffd45gsfs</Text>
+                        <Text style={{padding:5}}>{params.txId}</Text>
                         <Text style={{padding:5}}>已在区块中确认</Text>
                         <Text style={{padding:5}}>123095</Text>
                     </View>

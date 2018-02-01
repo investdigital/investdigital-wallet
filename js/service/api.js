@@ -45,14 +45,15 @@ export default class Api {
     static sendETH({txStr}){
         let formData = new FormData();
         formData.append("tx",txStr);
+//        console.log(formData)
         return fetchService(`${baseApi}/sendTx`,{method: "POST",body: formData});
     }
 
-     // 获取 NONCE
-     static getNonce(address){
-//     console.log(address);
-         return fetchService(`${baseApi}/getNonce/${address}`);
-        }
+//     // 获取 NONCE
+//     static getNonce(address){
+////     console.log(address);
+//         return fetchService(`${baseApi}/getNonce/${address}`);
+//        }
         //  发起交易 获取交易ID
 //    static sendTransaction(){
    //  console.log();

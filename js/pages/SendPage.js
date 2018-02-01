@@ -100,28 +100,10 @@ constructor(props) {
             return "0x0"+data;
         }
     }
-    componentDidMount(){
-//        this.animate()
-      //      APP初始化时生成的钱包地址
-//       const address =  GetSetStorage.getStorageAsync('address')
-//      const address = '0x0127eb89fF5bdD96af11b7e4e01cda03F22b28e1';
-//      //数据请求方式...
-//        Api.getNonce(address).then(data => {
-//        console.log('-----')
-//          console.log(data.data);
-//           this.setState({
-//           nonce:data.data
-//         })
-//        }).catch(err => {
-//          console.log(err);
-//        })
-      }
     onClick(){
      const text = this.state.text;
      const num = this.state.num;
      const tip = this.state.tip;
-
-
 
      if(text === '' || num === '' ){
         if(text === ''){
@@ -129,25 +111,13 @@ constructor(props) {
         }else{
            alert('金额不能为空')
         }
-      }else{
-
-//        Api.sendTransaction().then(data => {
-//          console.log('-----')
-//         console.log(data.data);
-////         this.setState({
-////           nonce:data.data
-////          })
-//         }).catch(err => {
-//          console.log(err);
-//        })
-       }
-
+      }
          GetSetStorage.getStorageAsync('address').then((result) => {
              let address=result;
              console.log("address"+address);
              Api.getNonce({address}).then(data => {
                  let nonce=data.data;
-                 console.log('nonce'+nonce);
+                 console.log('nonce1'+nonce);
                  if(data.status==1){
                      GetSetStorage.getStorageAsync('privateKey').then((result) => {
                          const privateKey=result;
@@ -159,8 +129,9 @@ constructor(props) {
                              gasLimit: this.changeFormat(this.state.gasLimit),
                              from: address,
                              to: this.state.text,//the to address
-                             value: this.changeFormat(this.state.num),//the amount of ether sent
+                             value: this.changeFormat(num * e18),//the amount of ether sent
                          };
+                         console.log(rawTx)
                          let tx = new Tx(rawTx);
                          tx.sign(key);
                          let serializedTx = tx.serialize();
@@ -196,12 +167,12 @@ constructor(props) {
          });
 
       }
-     }
+
     render(){
         const {navigate} = this.props.navigation;
         return(
             <View style={styles.container}>
-            <Text style={{padding:20}}>发送 {this.state.text}</Text>
+            <Text style={{padding:20}}>发送</Text>
                  <TextInput
                     style={styles.textinput}
                     onChangeText={(text) => this.setState({text})}

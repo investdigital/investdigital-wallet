@@ -5,7 +5,9 @@ import {
     Text,
     Button,
     Image,
-    ScrollView
+    ScrollView,
+    TouchableOpacity,
+    Linking
 } from 'react-native';
 import Modal from 'react-native-modalbox';
 import {AppSizes} from '../style';
@@ -14,6 +16,25 @@ import {AppSizes} from '../style';
 import { Api } from '../service';
 
 import GetSetStorage from '../utils/GetSetStorage';
+import ScrollViewItem from './ScrollViewItem.js';
+
+//const ScrollViewItem = ({ detail ,navigator}) => {
+//
+//console.log(detail)
+//
+//    return(
+//    <TouchableOpacity >
+//      <View style={styles.list} onPress={() => { this.props.navigation.navigate( 'Detail')}}>
+//       <Text  style={styles.boxshaow}>{detail.txId}{'\n'}
+//         <Text style={styles.orderstatus}> 完成</Text>
+//       </Text>
+//      </View>
+//      </TouchableOpacity>
+//    );
+//
+//}
+
+
 
 class HomePage extends Component{
 
@@ -27,90 +48,90 @@ class HomePage extends Component{
         this.state = {
              isChange:true,
              money:'',
-             price:'',
+             price:1000,
+             details:[]
             };
     }
-    componentWillMount(){
 
+    renderExpenseItem(item , i) {
+        return <ScrollViewItem key={i} detail={item} onPress={() => { this.props.navigation.navigate('Detail',{data:item})}}/>;
+      }
 
-    }
      componentDidMount() {
+       GetSetStorage.getStorageAsync('address').then((result) => {
+       console.log('address---'+ result)
+           const address = result;
+           const type = 'eth'
+                  Api.getBalance({address,type}).then(data => {
+                   console.log(data);
+                     this.setState({
+                       money:data.data
+//                      money:data.data.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                     })
+                   }).catch(err => {
+                     console.log(err);
+                   })
+  })
+//           Api.getAllPrice().then(data => {
+//                 console.log(data);
+//                 console.log(data.eth_usdt);
+//                 this.setState({
+//                 price:data.eth_usdt
+// //              price:data.eth_usdt.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+//                   })
+//                 }).catch(err => {
+//                    console.log(err);
+//                  })
+           GetSetStorage.getStorageAsync('ethList').then((result) => {
+                        console.log(JSON.parse(result).data)
+                        this.setState({
+                           details : JSON.parse(result).data
+                        })
+            })
 
-         const address = '0x0127eb89fF5bdD96af11b7e4e01cda03F22b28e1';
-          const type = 'eth'
-        Api.getBalance({address,type}).then(data => {
-        console.log(data.data);
-          this.setState({
-            money:data.data
-//             money:data.data.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-          })
-        }).catch(err => {
-          console.log(err);
-        })
-
-           Api.getAllPrice().then(data => {
-                       console.log(data);
-//                       this.state.price = data.eth_usdt
-                          this.setState({
-                          price:data.eth_usdt
-        //                    price:data.eth_usdt.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                          })
-                    }).catch(err => {
-                       console.log(err);
-                    })
       }
     onClick(){
      const ischange = this.state.isChange;
-
           if( ischange == true){
              this.setState({ isChange: false})
           }else{
              this.setState({ isChange: true})
           }
       }
-
+openSocial(url) {
+    Linking.openURL(url).catch(error => console.warn('An error occurred: ', error))
+  }
     render() {
 
-     const { money, price } = this.state;
-
-
-      const rmb = (money * price).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') ;
+     const { money, price, details } = this.state;
+      const rmb = (money * price)
       console.log(price)
 
         return (
             <View style={styles.container}>
              <View style={styles.banner}>
                  <View style={styles.header}>
-                     <Text style={styles.title} >bread
-
+                     <Text style={styles.title} onPress={() => { this.openSocial('https://weibo.com/nocower')}}>bread
                         <Text style={[styles.title,styles.search]} onPress={() => { this.props.navigation.navigate('SearchList')}}> 搜索 {'\n'}</Text>
                      </Text>
-
                  </View>
                   {this.state.isChange ? <View style={[styles.header,styles.toggle]}>
-                                           <Text style={styles.title2}  onPress={this.onClick.bind(this)}>b{money}
-                                              <Text style={styles.title3}> = ¥{rmb}</Text>
+                                           <Text style={styles.title2}  onPress={this.onClick.bind(this)}>b {money ? money :'loading'}
+                                              <Text style={styles.title3}> = ¥{price ? rmb :'loading'}</Text>
                                             </Text>
                                          </View>
                    : <View style={[styles.header,styles.toggle]}>
-                       <Text style={styles.title2}  onPress={this.onClick.bind(this)}>¥{rmb}
-                          <Text style={styles.title3}> = b{money}</Text>
+                       <Text style={styles.title2}  onPress={this.onClick.bind(this)}>¥{price ? rmb :'loading'}
+                          <Text style={styles.title3}> = b {money ? money :'loading'}</Text>
                        </Text>
                      </View>
                             }
                      </View>
              <View style={styles.list}>
-             <ScrollView style={{backgroundColor:'#fff'}}>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>0x0127eb89fF5bdD96af11b7e4e01cda03F22b28e1{'\n'}
-                     <Text style={styles.orderstatus}> 完成</Text>
-                  </Text>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}} style={styles.boxshaow}>0x0127eb89fF5bdD96af11b7e4e01cda03F22b28e1{'\n'}
-                    <Text style={styles.orderstatus}> 未完成</Text>
-                  </Text>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>0x0127eb89fF5bdD96af11b7e4e01cda03F22b28e1{'\n'}
-                     <Text style={styles.orderstatus}> 完成</Text>
-                  </Text>
-
+             <ScrollView style={{backgroundColor:'#fff'}} keyboardDismissMode={'on-drag'}>
+                {
+                    details.map((item,i)=>this.renderExpenseItem(item,i))
+                }
               </ScrollView>
              </View>
             </View>
@@ -177,7 +198,7 @@ banner: {
     },
     boxshaow :{
        width:320,
-       height:60,
+       height:85,
        fontSize:12,
        marginTop:30,
        padding:10,
