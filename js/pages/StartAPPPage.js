@@ -12,13 +12,18 @@ class StartAPPPage extends Component {
         };
     }
     static navigationOptions={
-        header:null
+        header:null,
+        cardStack: {
+            gesturesEnabled:false
+
+        }
     };
+
     componentDidMount() {
         Animated.timing(
             this.state.bounceValue, { toValue: 1.2, duration: 1000 }
         ).start();
-//         GetSetStorage.removeStorageAsync('isFirst');
+        GetSetStorage.removeStorageAsync('isFirst');
         this.timer = setTimeout(() => {
             GetSetStorage.getStorageAsync('isFirst').then((result) => {
                 if (result == null || result == '') {

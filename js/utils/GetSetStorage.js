@@ -28,7 +28,7 @@ class GetSetStorage {
                     console.log(`读取${key}失败` + error);
                     reject(`读取${key}失败${error}`);
                 } else {
-                    console.log(`读取${key}成功`);
+                    console.log(`读取${key}成功`,result);
                     resolve(result);
                 }
             });

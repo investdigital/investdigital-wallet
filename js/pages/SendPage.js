@@ -19,8 +19,9 @@ import GetSetStorage from '../utils/GetSetStorage';
 
 import * as Progress from 'react-native-progress';
 import Tx from 'ethereumjs-tx';
-
+import ScanQrcode from './ScanQrcode';
 import {AppSizes, AppComponent} from '../style/index';
+import getQueryString from '../utils/StringUtils'
 class SendPage extends Component{
 constructor(props) {
         super(props);
@@ -31,7 +32,7 @@ constructor(props) {
              progress: 0,
              gasLimit:'100000',
              gasPrice:'20',
-             gas:0.002
+             gas:0.002,
          };
     }
     static navigationOptions = {
@@ -47,7 +48,6 @@ constructor(props) {
         headerLeft:null,
     };
     componentWillMount() {
-
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (evt, gestureState) => true,
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -150,6 +150,7 @@ constructor(props) {
                                         GetSetStorage.setStorageAsync('ethList', JSON.stringify(ethList));
                                     }else{
                                         let ethList= JSON.parse(result);
+                                        console.log(ethList);
                                         ethList.data.unshift(item1);
                                         GetSetStorage.setStorageAsync('ethList', JSON.stringify(ethList));
                                     }
@@ -165,7 +166,6 @@ constructor(props) {
                  console.log(err);
              });
          });
-
       }
 
     render(){
@@ -198,7 +198,7 @@ constructor(props) {
                         />
                     <View style={styles.progress}>
                         <View style={styles.progressBar} {...this._panResponder.panHandlers}>
-                            <Text>{this.state.gas}</Text>
+                            <Text>{this.state.gas}ether</Text>
                             <Progress.Bar
                                 progress={this.state.progress}
                                 width={AppSizes.screen.widthThreeQuarters-18}
@@ -211,7 +211,6 @@ constructor(props) {
                                     style={{width: 18, height: 18}}
                                 />
                             </Text>
-
                         </TouchableHighlight>
                     </View>
                     <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this.onClick.bind(this)}>
@@ -219,7 +218,29 @@ constructor(props) {
                            发送
                         </Text>
                     </TouchableHighlight>
+                <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={() => navigate('ScanQrcode',{callback:(data)=>{
+                    let message=data;
+                    let text = data;
+                    let amount;
+                    if (message.indexOf(":") > -1 && message.indexOf("?") > -1) {
+                        text = message.substring(message.indexOf(":") + 1, message.indexOf("?"));
+                    } else if (message.indexOf(":") > -1) {
+                        text = message.substr(message.indexOf(":") + 1);
+                    } else if (message.indexOf("?") > -1) {
+                        text = message.substring(0, message.indexOf("?"));
+                    }
 
+                    if (data.indexOf("?") > -1) {
+                        amount = getQueryString(data.substr(data.indexOf("?")), "amount");
+                    }
+
+                    this.setState({num: amount, text:text});
+                }})
+                }>
+                    <Text style={styles.btnText}>
+                        扫描
+                    </Text>
+                </TouchableHighlight>
             </View>
         );
     }

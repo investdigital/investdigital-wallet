@@ -53,10 +53,6 @@ class HomePage extends Component{
             };
     }
 
-    renderExpenseItem(item , i) {
-        return <ScrollViewItem key={i} detail={item} onPress={() => { this.props.navigation.navigate('Detail',{data:item})}}/>;
-      }
-
      componentDidMount() {
        GetSetStorage.getStorageAsync('address').then((result) => {
        console.log('address---'+ result)

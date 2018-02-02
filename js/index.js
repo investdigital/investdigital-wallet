@@ -5,7 +5,8 @@ import {
     Text,
     Button,
     Animated,Dimensions,
-    Image
+    Image,
+    Platform
 } from 'react-native';
 
 import {
@@ -17,6 +18,7 @@ import GuideViewScreen from './pages/GuideViewScreen';
 import StartAPPPage from './pages/StartAPPPage';
 import MainScreenNavigator from './components/MainScreenNavigator';
 import RememberMnemonicPage from './pages/RememberMnemonicPage';
+import ScanQrcode from './pages/ScanQrcode';
 import CostMinerPage from './pages/CostMinerPage';
 
 import SearchList from './pages/SearchList';
@@ -32,7 +34,15 @@ const TouchWallet = StackNavigator({
     GuideView:{screen:GuideViewScreen},
     Remember:{screen:RememberMnemonicPage},
     SearchList:{screen:SearchList},
-    ScrollViewItem:{screen:ScrollViewItem}
+    ScrollViewItem:{screen:ScrollViewItem},
+    ScanQrcode:{screen:ScanQrcode}
+    }, {
+        navigationOptions: {
+            cardStack: {
+                gesturesEnabled:false
+
+            }
+        }
     }
 );
 export default TouchWallet;

@@ -7,13 +7,13 @@ import {
     StyleSheet,
     TouchableHighlight,
     Alert,
-    Clipboard
+    Clipboard,
 } from 'react-native';
 import Wallet from 'ethereumjs-wallet';
 import GetSetStorage from '../utils/GetSetStorage';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import {AppSizes, AppComponent} from '../style/index';
-import EditView from "../components/EditView";
+import LoadingView from '../components/LoadingView';
 class KeystoreScreen extends Component{
     static navigationOptions = {
         title:'导出Keystore',
@@ -21,7 +21,8 @@ class KeystoreScreen extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            keystore:'loading...'
+            keystore:'loading...',
+            showLoading:true
         };
     }
     componentWillMount() {
@@ -33,10 +34,15 @@ class KeystoreScreen extends Component{
             console.log('0');
             let wallet = Wallet.fromPrivateKey(key);
             console.log('1');
-            keystore1=wallet.toV3String(password);
+            try {
+                keystore1 = wallet.toV3String(password, {kdf: "pbkdf2", c: 2000});
+            } catch (e) {
+                console.log(e.message);
+            }
             console.log('2');
             this.setState({
-                keystore:keystore1
+                keystore:keystore1,
+                showLoading:false
             })
         })
     }
@@ -65,6 +71,7 @@ class KeystoreScreen extends Component{
                     </Text>
                 </TouchableHighlight>
                 <Toast position='center' ref="toast"/>
+                <LoadingView showLoading={ this.state.showLoading } />
             </View>
 
         );
@@ -86,6 +93,12 @@ const styles = StyleSheet.create({
         fontSize:20,
         color:'#329aff',
         marginBottom:AppSizes.margin_20,
+    },
+    loadingView: {
+        flex: 1,
+        height:AppSizes.screen.height,
+        width:AppSizes.screen.width,
+        position: 'absolute'
     },
 });
 export default KeystoreScreen;

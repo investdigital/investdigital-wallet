@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    private ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -26,11 +26,14 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RandomBytesPackage(),
-            new LinearGradientPackage()
+            new LinearGradientPackage(),
+             new RCTCapturePackage()
       );
     }
   };
-
+    public void setReactNativeHost(ReactNativeHost reactNativeHost) {
+    mReactNativeHost = reactNativeHost;
+  }
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;

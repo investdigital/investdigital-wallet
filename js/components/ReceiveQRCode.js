@@ -40,18 +40,19 @@ export default class ReceiveQRCode extends Component{
                     value={this.state.text}
                     keyboardType='numeric'
                     placeholder="ETH数量"
+                    clearButtonMode='while-editing'
                 />
                     </View>
                         }
                 {this.state.text ? <View style={styles.code}>
                     <QRCode
-                        value={`${this.state.address}?amount=${this.state.text}`}
+                        value={`investdigital:${this.state.address}?amount=${this.state.text}`}
                         size={AppSizes.screen.widthHalf}
                         bgColor='black'
                         fgColor='white'/>
                 </View> :<View style={styles.code}>
                     <QRCode
-                        value={`${this.state.address}`}
+                        value={`investdigital:${this.state.address}`}
                         size={AppSizes.screen.widthHalf}
                         bgColor='black'
                         fgColor='white'/>

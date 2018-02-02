@@ -11,9 +11,10 @@ import {
     Platform,
     TextInput,
     Image,
+    Modal,
     Dimensions
 } from 'react-native';
-const screenW = Dimensions.get('window').width;
+import {AppSizes, AppComponent} from '../style/index';
 
 export default class EditView extends Component {
     constructor(props) {
@@ -64,7 +65,8 @@ export default class EditView extends Component {
         const {ensureCallback,titleTxt} = this.props;
 
         return (
-            // 最外层是一个半透明的黑色蒙版背景,点击的时候对话框也会消失
+            <Modal transparent>
+            {/*// 最外层是一个半透明的黑色蒙版背景,点击的时候对话框也会消失*/}
             <Animated.View style={[styles.container, {opacity: this.state.opacityAnimationValue}]}>
                 <TouchableOpacity
                     activeOpacity={1}
@@ -82,23 +84,16 @@ export default class EditView extends Component {
                             <View style={{flexDirection: 'row', margin: 15}}>
                                 <View style={[styles.center, {width: 230}]}>
                                     <TextInput
-                                        style={{fontSize: 16, color: '#999',width:150,padding:0,height:40}}
+                                        style={{fontSize: 16, color: '#999',padding:0,height:40}}
                                         value={this.state.inputText}
                                         autoFocus={true}
                                         password="true"
                                         keyboardType='numeric'
                                         underlineColorAndroid="transparent"
                                         onChangeText={text => this.setState({inputText:text})}
+                                        clearButtonMode='while-editing'
                                     />
                                 </View>
-                                <TouchableOpacity
-                                    onPress={() => this.setState({inputText: ''})}
-                                    style={[styles.center, {width: 20}]}>
-                                    <Image
-                                        source={require('../images/close.jpeg')}
-                                        style={{width: 18, height: 18}}
-                                    />
-                                </TouchableOpacity>
                             </View>
                         </TouchableOpacity>
                         <View style={styles.buttonContainer}>
@@ -125,38 +120,39 @@ export default class EditView extends Component {
                     </Animated.View>
                 </TouchableOpacity>
             </Animated.View>
+            </Modal>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        backgroundColor: 'rgba(1, 1, 1, 0.5)'
+        backgroundColor: 'rgba(1, 1, 1, 0.5)',
+        height:AppSizes.screen.height,
+        width:AppSizes.screen.width,
     },
     contentContainer: {
+        top:50,
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: '#d9d9d9',
         borderWidth: 1,
         height: 150,
-        width: screenW * 0.75,
+        width: AppSizes.screen.widthThreeQuarters,
         backgroundColor: 'rgb(234, 234, 235)',
         borderRadius: 5,
     },
     promptContainer: {
         height: 100,
-        width: screenW * 0.75,
+        width: AppSizes.screen.widthThreeQuarters,
         alignItems: 'center',
         justifyContent: 'center'
     },
     buttonContainer: {
         height: 50,
-        width: screenW * 0.75,
+        width: AppSizes.screen.widthThreeQuarters,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

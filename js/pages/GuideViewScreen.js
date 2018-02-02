@@ -8,70 +8,66 @@ import {
     TouchableHighlight,
     Alert,
     KeyboardAvoidingView,
+    Keyboard,
     Image
 } from 'react-native';
 import lightwallet from 'eth-lightwallet';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import {AppSizes, AppComponent} from '../style/index';
 import GetSetStorage from '../utils/GetSetStorage';
-
-// Service
-import { Api } from '../service';
+import LoadingView from '../components/LoadingView'
 class GuideViewScreen extends Component{
     static navigationOptions={
-        header:null
+        header:null,
+        cardStack: {
+            gesturesEnabled:false
+
+        }
     };
     constructor(props) {
         super(props);
         this.state = {
             inputShow:true,
             text:'',
-            mnemonic:lightwallet.keystore.generateRandomSeed()
-        };
-    }
-
-//           componentDidMount(){
-//             Api.getAllPrice().then(data => {
-//             const eth_sudt = data.eth_usdt
-//              GetSetStorage.setStorageAsync('price', eth_usdt);
-//                    }).catch(err => {
-//                       console.log(err);
-//                    })
-//            }
-
-    showMnemonic(){
-        if(this.state.password === ''){
-            alert("请输入密码")
+            mnemonic:'',
+            showLoading:false
         }
-        else{
-            this.setState({
-                inputShow:false
-            });
-        };
+        this.showMnemonic=this.showMnemonic.bind(this);
     }
     showMnemonic(){
+        Keyboard.dismiss();
+        const _this=this;
         if(this.state.text){
             let password = this.state.text;
-            let mnemonic = this.state.mnemonic;
-            GetSetStorage.setStorageAsync('password', password);
+            let mnemonic = lightwallet.keystore.generateRandomSeed();
             this.setState({
-                inputShow:false,
-                text:''
-            });
-            let global_keystore;
-            lightwallet.keystore.createVault({
-                password: password,
-                seedPhrase: mnemonic,
-                hdPathString: "m/0'/0'/0'"
-            }, function (err, ks) {
-                global_keystore = ks;
-                global_keystore.keyFromPassword(password,function(err,pwDerivedKey){
-                    global_keystore.generateNewAddress(pwDerivedKey, 1);
-                    //获取地址列表 返回当前存储在密钥库中的十六进制字符串地址列表。
-                    let address = global_keystore.getAddresses()[0];
-                    let privateKey1=global_keystore.exportPrivateKey(address,pwDerivedKey);
-                    GetSetStorage.setStorageAsync('privateKey', privateKey1);
-                    GetSetStorage.setStorageAsync('address', address);
+                showLoading: true,
+                mnemonic: mnemonic
+            // })
+            },()=>{
+                console.log(this.state.showLoading);
+                GetSetStorage.setStorageAsync('password', password);
+                let global_keystore;
+                lightwallet.keystore.createVault({
+                    password: password,
+                    seedPhrase: this.state.mnemonic,
+                    hdPathString: "m/0'/0'/0'"
+                }, function (err, ks) {
+                    console.log(2);
+                    global_keystore = ks;
+                    global_keystore.keyFromPassword(password,function(err,pwDerivedKey){
+                        global_keystore.generateNewAddress(pwDerivedKey, 1);
+                        //获取地址列表 返回当前存储在密钥库中的十六进制字符串地址列表。
+                        let address = global_keystore.getAddresses()[0];
+                        let privateKey1=global_keystore.exportPrivateKey(address,pwDerivedKey);
+                        GetSetStorage.setStorageAsync('privateKey', privateKey1);
+                        GetSetStorage.setStorageAsync('address', address);
+                        _this.setState({
+                            showLoading:false,
+                            inputShow:false,
+                            text:'',
+                        });
+                    });
                 });
             });
         }else{
@@ -87,25 +83,23 @@ class GuideViewScreen extends Component{
             >
                 <Text style={[styles.brand]}>TouchWallet</Text>
                 {this.state.inputShow ?
-
                     <View>
                         <Text>请输入密码</Text>
-
                         <TextInput
+                            ref="text1"
                     style={styles.input}
                     password="true"
-                    keyboardType='numeric'
                     placeholder="密码"
                     onChangeText={(text)=>{this.setState({text})}}
-                />
-                        <TouchableHighlight style={[AppComponent.btn]} underlayColor="#008AC4"  onPress={this.showMnemonic.bind(this)}>
+                            underlineColorAndroid="transparent"
+                        />
+                        <TouchableHighlight style={[AppComponent.btn]} underlayColor="#008AC4"  onPress={this.showMnemonic}>
                             <Text style={styles.btnText}>
                                 确定
                             </Text>
                         </TouchableHighlight>
                     </View>
                     :
-
                     <View style={styles.mnemonicTitle}>
                         <Text style={[styles.title]}>助记词</Text>
                         <Text style={{marginBottom:AppSizes.margin_20}}>（请牢记您的助记词）</Text>
@@ -118,6 +112,7 @@ class GuideViewScreen extends Component{
                     </View>
                     }
                 <Toast position='top' ref="toast"/>
+                <LoadingView showLoading={this.state.showLoading} />
             </KeyboardAvoidingView>
         )
     }
