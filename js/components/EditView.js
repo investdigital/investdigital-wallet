@@ -8,6 +8,7 @@ import {
     Text,
     TouchableOpacity,
     Animated,
+    Easing,
     Platform,
     TextInput,
     Image,
@@ -15,7 +16,6 @@ import {
     Dimensions
 } from 'react-native';
 import {AppSizes, AppComponent} from '../style/index';
-
 export default class EditView extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +28,6 @@ export default class EditView extends Component {
             scaleAnimationValue: new Animated.Value(0)
         }
     }
-
     // 打开对话框
     show() {
         this.setState({
@@ -41,7 +40,8 @@ export default class EditView extends Component {
             //Animated.timing == 推动一个值按照一个过渡曲线而随时间变化
             Animated.timing(this.state.opacityAnimationValue, {
                 toValue: 1,
-                duration: 200 + 100
+                duration: 200,
+                easing:Easing.linear
             }),
             //Animated.spring == 产生一个基于Rebound和Origami实现的Spring动画。它会在toValue值更新的同时跟踪当前的速度状态，以确保动画连贯,比timing动画连贯流畅
             Animated.spring(this.state.scaleAnimationValue, {
@@ -51,21 +51,17 @@ export default class EditView extends Component {
             })
         ]).start();
     }
-
     // 关闭对话框
     _close() {
         this.setState({isShow: false});
         this.state.opacityAnimationValue.setValue(0);
         this.state.scaleAnimationValue.setValue(0);
     }
-
     render() {
         if (!this.state.isShow) return null;
-
         const {ensureCallback,titleTxt} = this.props;
-
         return (
-            <Modal transparent>
+            <Modal transparent onRequestClose={()=> this._close}>
             {/*// 最外层是一个半透明的黑色蒙版背景,点击的时候对话框也会消失*/}
             <Animated.View style={[styles.container, {opacity: this.state.opacityAnimationValue}]}>
                 <TouchableOpacity
@@ -84,7 +80,7 @@ export default class EditView extends Component {
                             <View style={{flexDirection: 'row', margin: 15}}>
                                 <View style={[styles.center, {width: 230}]}>
                                     <TextInput
-                                        style={{fontSize: 16, color: '#999',padding:0,height:40}}
+                                        style={{fontSize: 16, color: '#999',padding:0,height:40,width: 230}}
                                         value={this.state.inputText}
                                         autoFocus={true}
                                         password="true"
@@ -124,7 +120,6 @@ export default class EditView extends Component {
         )
     }
 }
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -165,6 +160,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#d9d9d9'
     },
     center: {
+        height:50,
         justifyContent: 'center',
         alignItems: 'center'
     }

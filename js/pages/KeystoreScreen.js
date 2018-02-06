@@ -8,12 +8,12 @@ import {
     TouchableHighlight,
     Alert,
     Clipboard,
+    ScrollView
 } from 'react-native';
 import Wallet from 'ethereumjs-wallet';
 import GetSetStorage from '../utils/GetSetStorage';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import {AppSizes, AppComponent} from '../style/index';
-import LoadingView from '../components/LoadingView';
 class KeystoreScreen extends Component{
     static navigationOptions = {
         title:'导出Keystore',
@@ -22,7 +22,6 @@ class KeystoreScreen extends Component{
         super(props);
         this.state = {
             keystore:'loading...',
-            showLoading:true
         };
     }
     componentWillMount() {
@@ -31,18 +30,10 @@ class KeystoreScreen extends Component{
         let password=params.data;
         GetSetStorage.getStorageAsync('privateKey').then((result)=>{
             let key = Buffer.from(result, 'hex');
-            console.log('0');
             let wallet = Wallet.fromPrivateKey(key);
-            console.log('1');
-            try {
-                keystore1 = wallet.toV3String(password, {kdf: "pbkdf2", c: 2000});
-            } catch (e) {
-                console.log(e.message);
-            }
-            console.log('2');
+            keystore1 = wallet.toV3String(password, {kdf: "pbkdf2", c: 2000});
             this.setState({
-                keystore:keystore1,
-                showLoading:false
+                keystore:keystore1
             })
         })
     }
@@ -59,21 +50,21 @@ class KeystoreScreen extends Component{
     };
     render() {
         return (
-            <View style={styles.container}>
-                <View style={{padding:20}}>
-                    <Text style={styles.title}>离线保存</Text>
-                    <Text>请复制粘贴Keystore文件到安全、离线的地方保存。切勿保存至邮箱、网盘、聊天工具等。切勿通过网络工具传输Keystore文件。</Text>
+            <ScrollView style={styles.mainStyle}>
+                <View style={styles.container}>
+                    <View style={{padding:20}}>
+                        <Text style={styles.title}>离线保存</Text>
+                        <Text>请复制粘贴Keystore文件到安全、离线的地方保存。切勿保存至邮箱、网盘、聊天工具等。切勿通过网络工具传输Keystore文件。</Text>
+                    </View>
+                    <Text style={{margin:20,padding:20,borderWidth:1,borderColor:"grey",borderStyle:"solid",backgroundColor:"#F5F5F5",borderRadius:10}}>{this.state.keystore}</Text>
+                    <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this._setClipboardContent}>
+                        <Text style={styles.btnText}>
+                            复制keystore
+                        </Text>
+                    </TouchableHighlight>
+                    <Toast position='center' ref="toast"/>
                 </View>
-                <Text style={{margin:20,padding:20,borderWidth:1,borderColor:"grey",borderStyle:"solid",backgroundColor:"#F5F5F5",borderRadius:10}}>{this.state.keystore}</Text>
-                <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this._setClipboardContent}>
-                    <Text style={styles.btnText}>
-                        复制keystore
-                    </Text>
-                </TouchableHighlight>
-                <Toast position='center' ref="toast"/>
-                <LoadingView showLoading={ this.state.showLoading } />
-            </View>
-
+            </ScrollView>
         );
     }
 }
@@ -82,6 +73,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
+        width:AppSizes.screen.width,
+        minHeight:AppSizes.screen.height,
     },
     btn: {
         marginTop:AppSizes.margin_20,

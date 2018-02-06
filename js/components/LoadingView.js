@@ -9,7 +9,6 @@ import {
     Text
 } from 'react-native';
 import {AppSizes, AppComponent} from '../style/index';
-const { width, height } = Dimensions.get('window');
 class LoadingView extends Component{
     constructor(props) {
         super(props);
@@ -43,10 +42,4 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 });
-LoadingView.propTypes = {
-    loadingViewClick: React.PropTypes.func, //.isRequired,
-    showLoading: React.PropTypes.bool.isRequired,
-    opacity: React.PropTypes.number,
-    backgroundColor: React.PropTypes.string
-};
 export default LoadingView

@@ -19,10 +19,6 @@ import LoadingView from '../components/LoadingView'
 class GuideViewScreen extends Component{
     static navigationOptions={
         header:null,
-        cardStack: {
-            gesturesEnabled:false
-
-        }
     };
     constructor(props) {
         super(props);
@@ -51,7 +47,7 @@ class GuideViewScreen extends Component{
                 lightwallet.keystore.createVault({
                     password: password,
                     seedPhrase: this.state.mnemonic,
-                    hdPathString: "m/0'/0'/0'"
+                    hdPathString: "m/44'/60'/0'/0"
                 }, function (err, ks) {
                     console.log(2);
                     global_keystore = ks;

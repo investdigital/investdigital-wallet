@@ -7,7 +7,8 @@ import {
     StyleSheet,
     Clipboard,
     AlertIOS,
-    TouchableHighlight
+    TouchableHighlight,
+    Linking
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast'
 import {AppSizes} from '../style/index';
@@ -44,32 +45,35 @@ class DetailScreen extends React.Component {
     _Unfoldthecontent(){
        this.setState({isHiden: false})
     }
+     openSocial(url) {
+            Linking.openURL(url).catch(error => console.warn('An error occurred: ', error))
+          }
 
     render() {
         const {params} = this.props.navigation.state;
 
-//        onPress={() => { this.props.navigation.navigate(`https://etherscan.io/tx/0x4cf723d7823454e88f985ae5d2722618540b606094d7c314748c7235496c33b7`)}}
+        const data = params.data
+//        console.log('-----详情页里获取到的数据------')
+//        console.log(params.data)
         return (
             <View style={styles.container}>
-                <Text style={{padding:5,marginTop:20}}>{params.time}</Text>
-                <Text style={{padding:5}} onPress={this._setClipboardContent}>已接收 idt </Text>
-                 <Text style={{padding:5}}>在 {params.from}</Text>
-                 <Text style={{padding:5}}>状态 : 完成</Text>
+                <Text style={{padding:5,marginTop:20}}>{data.time}</Text>
+                <Text style={{padding:5}} onPress={this._setClipboardContent}>已接收 IDT </Text>
+                 <Text style={{padding:5}}>在 {data.from}</Text>
+                 <Text style={{padding:5}}>状态 : {data.status == 0 ? '进行中':dedatatail.status == 1?'已完成':'未知'}</Text>
                  <Text style={{padding:5}}>备忘录 : </Text>
-                 <Text style={{padding:5}}>金额 : </Text>
-                 <Text style={{padding:5}}>期初余额 : B0</Text>
-                 <Text style={{padding:5}}>期末余额 : B2,000 </Text>
+                 <Text style={{padding:5}}>金额 : {data.amount}</Text>
                  <Text style={{padding:5}}>已在此地址接收 </Text>
-                 {this.getButton(params.to, 'top', DURATION.LENGTH_SHORT)}
+                 {this.getButton(data.to, 'top', DURATION.LENGTH_SHORT)}
                  <Toast ref="toast" position={this.state.position}/>
 
                  {this.state.isHiden ? <View style={{flex:1}}>
                   <Text style={{padding:5}} onPress={this._Unfoldthecontent.bind(this)}>更多... </Text></View>
                   : <View>
                         <Text style={{padding:5}}>比特币交易ID</Text>
-                        <Text style={{padding:5}}>{params.txId}</Text>
+                        <Text style={{padding:5}} onPress={() => { this.openSocial('https://etherscan.io/tx`')}} >{data.txId}</Text>
                         <Text style={{padding:5}}>已在区块中确认</Text>
-                        <Text style={{padding:5}}>123095</Text>
+                        <Text style={{padding:5}}>{data.blockNumber}</Text>
                     </View>
                  }
             </View>

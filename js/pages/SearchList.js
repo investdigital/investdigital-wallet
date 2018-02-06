@@ -17,7 +17,7 @@ import { Api } from '../service';
 
 //本地存取
 import GetSetStorage from '../utils/GetSetStorage';
-
+import ScrollViewItem from './ScrollViewItem.js';
 export default class SearchList extends Component{
    constructor(props) {
            super(props);
@@ -26,7 +26,10 @@ export default class SearchList extends Component{
                 list1:[],
                 list2:[],
               },
-               status:0
+               status:'',
+               type:'',
+               isHidden:false,
+               details:[]
            };
        }
  static navigationOptions = ({ navigation }) => ({
@@ -38,8 +41,8 @@ export default class SearchList extends Component{
   console.log(status)
   if(lastStatus === status){
     this.setState({
-        status:0,
-        text:""
+        status:'',
+        text:"",
       })
     }else{
     this.setState({
@@ -51,13 +54,43 @@ export default class SearchList extends Component{
     //数据请求的方法
 
     GetSetStorage.getStorageAsync('ethList').then((result) => {
-         console.log(JSON.parse(result).data)
+//         console.log(JSON.parse(result).data)
          this.setState({
             details : JSON.parse(result).data
        })
    })
   }
+  changeOpentype(type){
+  const lastType = this.state.type;
+    console.log(type)
+    if(lastType === type){
+      this.setState({
+         type:''
+        })
+      }else{
+      this.setState({
+              type
+          })
+      }
+
+    GetSetStorage.getStorageAsync('ethList').then((result) => {
+  //         console.log(JSON.parse(result).data)
+           this.setState({
+              details : JSON.parse(result).data
+         })
+  })
+  }
+  renderExpenseItem(item , i) {
+  console.log('----search-----')
+  console.log(item)
+  const status = this.state.status;
+  console.log(status)
+     return (
+          <ScrollViewItem key={i} detail={item} isHidden={`${item.status === this.state.status ? true : false}`}  navigator={this.props.navigation}/>
+        )}
     render(){
+
+    const { details } = this.state;
         return (
          <View>
              <View style={styles.container}>
@@ -73,47 +106,46 @@ export default class SearchList extends Component{
                 </View>
                 <Text style={{color:'#fff'}} onPress={() => { this.props.navigation.navigate('Home')}}> 取消</Text>
              </View>
+              <View>
              <View style={styles.btnlist}>
-                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 1 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
-                  this.changeOpen(1)
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.type === 1 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                  this.changeOpentype(1)
                   }}>
-                  <Text style={[styles.btnText,{color:this.state.status === 1 ?'#fff':'#329aff'}]}>
+                  <Text style={[styles.btnText,{color:this.state.type === 1 ?'#fff':'#329aff'}]}>
                        发送
                   </Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 2 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
-                   this.changeOpen(2)
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 0 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                   this.changeOpen(0)
                     }}>
-                  <Text style={[styles.btnText,{color:this.state.status === 2 ?'#fff':'#329aff'}]}>
+                  <Text style={[styles.btnText,{color:this.state.status === 0 ?'#fff':'#329aff'}]}>
                      确认中
                    </Text>
                 </TouchableHighlight>
 
-                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 3 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
-                  this.changeOpen(3)
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 1 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                  this.changeOpen(1)
                   }}>
-                  <Text style={[styles.btnText,{color:this.state.status === 3 ?'#fff':'#329aff'}]}>
+                  <Text style={[styles.btnText,{color:this.state.status === 1 ?'#fff':'#329aff'}]}>
                      已完成
                    </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === 4 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
-                   this.changeOpen(4)
+                <TouchableHighlight style={[styles.btn,{backgroundColor:this.state.status === -1 ?'#329aff':'#fff'}]} underlayColor="#fff" onPress={()=>{
+                   this.changeOpen(-1)
                   }}>
-                   <Text style={[styles.btnText,{color:this.state.status === 4 ?'#fff':'#329aff'}]}>
+                   <Text style={[styles.btnText,{color:this.state.status === -1 ?'#fff':'#329aff'}]}>
                       失败
                    </Text>
                 </TouchableHighlight>
              </View>
              <View style={styles.list}>
-                <ScrollView>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>111111111111111111111111111111111111111111111111</Text>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}} style={styles.boxshaow}>2222222222222222222222222222222222222222222222222</Text>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>111111111111111111111111111111111111111111111111</Text>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}} style={styles.boxshaow}>2222222222222222222222222222222222222222222222222</Text>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}}  style={styles.boxshaow}>111111111111111111111111111111111111111111111111</Text>
-                  <Text onPress={() => { this.props.navigation.navigate('Detail',{user:'fengxiali',address:'Xv7serw31fikjhjberwov3nb28vz62'})}} style={styles.boxshaow}>2222222222222222222222222222222222222222222222222</Text>
+                <ScrollView  keyboardDismissMode={'on-drag'}>
+                  {
+                     details.map((item,i)=>this.renderExpenseItem(item,i))
+                  }
                 </ScrollView>
+             </View>
              </View>
           </View>
         )
@@ -168,7 +200,7 @@ const styles = StyleSheet.create({
        flexDirection: 'row',   // 水平排布
        flex:1,
        justifyContent: 'space-around',
-       marginBottom:30,
+       marginBottom:50,
     },
     btn: {
          marginTop:AppSizes.margin_40,
@@ -184,7 +216,7 @@ const styles = StyleSheet.create({
              color:"#329aff"
         },
         list:{
-//                backgroundColor:'#fff',
+//                 backgroundColor:'#fff',
                   justifyContent:'center',
                   alignItems:'center'
             },

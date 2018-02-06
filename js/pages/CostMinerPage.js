@@ -22,9 +22,7 @@ class CostMinerPage extends React.Component {
         title:'矿工费用说明',
 
     };
-
     render() {
-        const {params} = this.props.navigation.state;
         return (
             <View style={styles.container}>
                 <View style={{padding:20}}>

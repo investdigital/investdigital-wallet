@@ -41,6 +41,7 @@ export default class ReceiveQRCode extends Component{
                     keyboardType='numeric'
                     placeholder="ETH数量"
                     clearButtonMode='while-editing'
+                    underlineColorAndroid="transparent"
                 />
                     </View>
                         }

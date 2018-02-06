@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modalbox';
 import {AppSizes} from '../style';
-
 // Service
 import { Api } from '../service';
 
@@ -52,34 +51,34 @@ class HomePage extends Component{
              details:[]
             };
     }
-
      componentDidMount() {
+//     GetSetStorage.removeStorageAsync('ethList');
        GetSetStorage.getStorageAsync('address').then((result) => {
        console.log('address---'+ result)
            const address = result;
            const type = 'eth'
                   Api.getBalance({address,type}).then(data => {
-                   console.log(data);
+//                   console.log(data);
                      this.setState({
-                       money:data.data
-//                      money:data.data.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+//                       money:data.data
+                      money:data.data.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                      })
                    }).catch(err => {
                      console.log(err);
                    })
   })
-//           Api.getAllPrice().then(data => {
-//                 console.log(data);
-//                 console.log(data.eth_usdt);
-//                 this.setState({
-//                 price:data.eth_usdt
-// //              price:data.eth_usdt.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-//                   })
-//                 }).catch(err => {
-//                    console.log(err);
-//                  })
+           Api.getAllPrice().then(data => {
+                 console.log(data);
+                 this.setState({
+//                 price:data.eth_usdt || ''
+ //              price:data.eth_usdt.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                   })
+                 }).catch(err => {
+                    console.log(err);
+                  })
            GetSetStorage.getStorageAsync('ethList').then((result) => {
-                        console.log(JSON.parse(result).data)
+//                      console.log('-----从本地获取的数组-----')
+//                        console.log(JSON.parse(result).data)
                         this.setState({
                            details : JSON.parse(result).data
                         })
@@ -94,29 +93,30 @@ class HomePage extends Component{
              this.setState({ isChange: true})
           }
       }
-openSocial(url) {
-    Linking.openURL(url).catch(error => console.warn('An error occurred: ', error))
-  }
+
+
+     renderExpenseItem(item , i) {
+          return (
+            <ScrollViewItem key={i} detail={item} navigator={this.props.navigation}/>
+          )
+        }
     render() {
-
-     const { money, price, details } = this.state;
-      const rmb = (money * price)
-      console.log(price)
-
+      const { money, price, details } = this.state;
+      const rmb = (parseInt(money) * price)
+       console.log(rmb)
         return (
             <View style={styles.container}>
              <View style={styles.banner}>
                  <View style={styles.header}>
-                     <Text style={styles.title} onPress={() => { this.openSocial('https://weibo.com/nocower')}}>bread
-                        <Text style={[styles.title,styles.search]} onPress={() => { this.props.navigation.navigate('SearchList')}}> 搜索 {'\n'}</Text>
-                     </Text>
+                     <Text style={styles.title}>bread</Text>
+                     <Text style={[styles.title,styles.search]} onPress={() => { this.props.navigation.navigate('SearchList')}}> 搜索 {'\n'}</Text>
                  </View>
-                  {this.state.isChange ? <View style={[styles.header,styles.toggle]}>
+                  {this.state.isChange ? <View style={[styles.left]}>
                                            <Text style={styles.title2}  onPress={this.onClick.bind(this)}>b {money ? money :'loading'}
                                               <Text style={styles.title3}> = ¥{price ? rmb :'loading'}</Text>
                                             </Text>
                                          </View>
-                   : <View style={[styles.header,styles.toggle]}>
+                   : <View style={[styles.left,styles.toggle]}>
                        <Text style={styles.title2}  onPress={this.onClick.bind(this)}>¥{price ? rmb :'loading'}
                           <Text style={styles.title3}> = b {money ? money :'loading'}</Text>
                        </Text>
@@ -134,28 +134,28 @@ openSocial(url) {
         )
     }
 }
+
 const styles = StyleSheet.create({
 banner: {
    backgroundColor: '#329AFF',
-    flexDirection: 'row',
-    alignItems: 'center',
     padding: 10,
     height:140,
   },
   header:{
+  width:AppSizes.widthThreeQuarters,
+   flexDirection: 'row',
+   justifyContent:'space-between',
     marginLeft:20,
+    marginTop:20,
+    marginRight:20
   },
-  toggle:{
-     flex:1,
-     top:30,
-     left:-120
+  left:{
+     marginLeft:20,
   },
   title: {
     fontSize: 20,
     fontWeight: '400',
     color: '#fff',
-    position:'relative',
-    top:-10
   },
   title2: {
       fontSize: 20,
@@ -163,9 +163,9 @@ banner: {
       color: '#fff',
     },
   search :{
-    flex:1,
-    color:'red',
-    justifyContent:'space-around'
+    color:'#fff',
+    position:'relative',
+    left:-50
   },
   title1:{
         fontSize: 11,

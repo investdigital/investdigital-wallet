@@ -42,10 +42,10 @@ export default class Api {
    static getNonce({address}){
        return fetchService(`${baseApi}/getNonce/${address}`,{method: "GET"});
    }
+   //发送ETH
     static sendETH({txStr}){
         let formData = new FormData();
         formData.append("tx",txStr);
-//        console.log(formData)
         return fetchService(`${baseApi}/sendTx`,{method: "POST",body: formData});
     }
 

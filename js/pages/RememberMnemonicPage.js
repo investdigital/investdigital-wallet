@@ -63,7 +63,6 @@ class RememberMnemonicPage extends Component{
                 this.refs.toast.show('请核对问题一');
                 // Alert.alert("请核对问题一");
             }
-
         }else{
             this.refs.toast.show('请输入正确答案');
             // Alert.alert('请输入正确答案');
@@ -84,6 +83,7 @@ class RememberMnemonicPage extends Component{
                         <TextInput
                             style={styles.input}
                             autoCapitalize="none"
+                            underlineColorAndroid="transparent"
                             onChangeText={(question1)=>{this.setState({question1})}}
 
                         />
@@ -91,6 +91,7 @@ class RememberMnemonicPage extends Component{
                         <TextInput
                             style={styles.input}
                             autoCapitalize="none"
+                            underlineColorAndroid="transparent"
                             onChangeText={(question2)=>{this.setState({question2})}}
                         />
                         <TouchableHighlight style={[AppComponent.btn]} underlayColor="#008AC4"  onPress={this.handleRemember.bind(this,mnemonic)}>

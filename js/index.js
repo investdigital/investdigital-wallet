@@ -38,10 +38,8 @@ const TouchWallet = StackNavigator({
     ScanQrcode:{screen:ScanQrcode}
     }, {
         navigationOptions: {
-            cardStack: {
-                gesturesEnabled:false
+            gesturesEnabled:false,
 
-            }
         }
     }
 );
