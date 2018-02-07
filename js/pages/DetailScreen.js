@@ -71,7 +71,7 @@ class DetailScreen extends React.Component {
                   <Text style={{padding:5}} onPress={this._Unfoldthecontent.bind(this)}>更多... </Text></View>
                   : <View>
                         <Text style={{padding:5}}>比特币交易ID</Text>
-                        <Text style={{padding:5}} onPress={() => { this.openSocial('https://etherscan.io/tx`')}} >{data.txId}</Text>
+                        <Text style={{padding:5}} onPress={() => { this.openSocial('https://etherscan.io/tx')}} >{data.txId}</Text>
                         <Text style={{padding:5}}>已在区块中确认</Text>
                         <Text style={{padding:5}}>{data.blockNumber}</Text>
                     </View>
