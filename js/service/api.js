@@ -48,17 +48,18 @@ export default class Api {
         formData.append("tx",txStr);
         return fetchService(`${baseApi}/sendTx`,{method: "POST",body: formData});
     }
-
-//     // 获取 NONCE
-//     static getNonce(address){
-////     console.log(address);
-//         return fetchService(`${baseApi}/getNonce/${address}`);
-//        }
-        //  发起交易 获取交易ID
-//    static sendTransaction(){
-   //  console.log();
-//      return fetchService(`${baseApi}/sendTx`);
-//           }
+    //初始化app
+    static initDevice({initData}){
+      console.log(initData);
+        return fetchService(`${baseApi}/initDevice`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(initData)
+        });
+    }
 
 //    获取 首页列表
     static getOrderList(order) {

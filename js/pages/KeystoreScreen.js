@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Wallet from 'ethereumjs-wallet';
 import GetSetStorage from '../utils/GetSetStorage';
+import AndroidBack from '../components/AndroidBack';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import {AppSizes, AppComponent} from '../style/index';
 class KeystoreScreen extends Component{
@@ -52,6 +53,7 @@ class KeystoreScreen extends Component{
         return (
             <ScrollView style={styles.mainStyle}>
                 <View style={styles.container}>
+                    <AndroidBack router1={this.props.navigation.state.routeName}/>
                     <View style={{padding:20}}>
                         <Text style={styles.title}>离线保存</Text>
                         <Text>请复制粘贴Keystore文件到安全、离线的地方保存。切勿保存至邮箱、网盘、聊天工具等。切勿通过网络工具传输Keystore文件。</Text>

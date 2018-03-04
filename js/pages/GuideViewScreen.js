@@ -15,7 +15,7 @@ import lightwallet from 'eth-lightwallet';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import {AppSizes, AppComponent} from '../style/index';
 import GetSetStorage from '../utils/GetSetStorage';
-import LoadingView from '../components/LoadingView'
+// import LoadingView from '../components/LoadingView'
 class GuideViewScreen extends Component{
     static navigationOptions={
         header:null,
@@ -41,7 +41,6 @@ class GuideViewScreen extends Component{
                 mnemonic: mnemonic
             // })
             },()=>{
-                console.log(this.state.showLoading);
                 GetSetStorage.setStorageAsync('password', password);
                 let global_keystore;
                 lightwallet.keystore.createVault({
@@ -49,7 +48,6 @@ class GuideViewScreen extends Component{
                     seedPhrase: this.state.mnemonic,
                     hdPathString: "m/44'/60'/0'/0"
                 }, function (err, ks) {
-                    console.log(2);
                     global_keystore = ks;
                     global_keystore.keyFromPassword(password,function(err,pwDerivedKey){
                         global_keystore.generateNewAddress(pwDerivedKey, 1);
@@ -108,7 +106,6 @@ class GuideViewScreen extends Component{
                     </View>
                     }
                 <Toast position='top' ref="toast"/>
-                <LoadingView showLoading={this.state.showLoading} />
             </KeyboardAvoidingView>
         )
     }

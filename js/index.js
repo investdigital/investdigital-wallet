@@ -34,7 +34,6 @@ const TouchWallet = StackNavigator({
     GuideView:{screen:GuideViewScreen},
     Remember:{screen:RememberMnemonicPage},
     SearchList:{screen:SearchList},
-    ScrollViewItem:{screen:ScrollViewItem},
     ScanQrcode:{screen:ScanQrcode}
     }, {
         navigationOptions: {
@@ -43,4 +42,5 @@ const TouchWallet = StackNavigator({
         }
     }
 );
+
 export default TouchWallet;

@@ -14,7 +14,8 @@ import {
 } from 'react-native';
 import EditView from '../components/EditView';
 import GetSetStorage from '../utils/GetSetStorage';
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, {DURATION} from 'react-native-easy-toast';
+import AndroidBack from '../components/AndroidBack';
 // Styles
 import {AppSizes, AppComponent} from '../style/index';
 class MenuPage extends Component{
@@ -43,6 +44,7 @@ class MenuPage extends Component{
     render(){
         return(
             <View style={{backgroundColor:'#fff',flex:1}}>
+                <AndroidBack router1={this.props.navigation.state.routeName}/>
                 <ScrollView style={styles.mainStyle}>
                     {this.renderItem()}
                 </ScrollView>

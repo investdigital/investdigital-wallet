@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import  {
+import {
     Image,
     TextInput,
     View,
@@ -9,60 +9,53 @@ import  {
     TouchableHighlight,
     ScrollView
 } from 'react-native';
-
 import {AppSizes, AppComponent} from '../style/index';
-
-// Service
-import { Api } from '../service';
 
 //本地存取
 import GetSetStorage from '../utils/GetSetStorage';
 import ScrollViewItem from './ScrollViewItem.js';
 export default class SearchList extends Component{
    constructor(props) {
-           super(props);
-            this.state = {
-              data:{
-                list1:[],
-                list2:[],
-              },
-               status:'',
-               type:'',
-               isHidden:false,
-               details:[]
-           };
-       }
+       super(props);
+        this.state = {
+          data:{
+            list1:[],
+            list2:[]
+          },
+           status:'',
+           type:'',
+           isHidden:false,
+           details:[]
+       };
+   }
  static navigationOptions = ({ navigation }) => ({
     title: '搜索订单',
-  });
-
+ });
   changeOpen(status){
-   const lastStatus = this.state.status;
-  console.log(status)
-  if(lastStatus === status){
-    this.setState({
-        status:'',
-        text:"",
-      })
-    }else{
-    this.setState({
-            status
-        })
-    }
-    const orderStatus = this.state.status;
-    const inputText = this.state.text;
-    //数据请求的方法
-
-    GetSetStorage.getStorageAsync('ethList').then((result) => {
-//         console.log(JSON.parse(result).data)
-         this.setState({
-            details : JSON.parse(result).data
+      const lastStatus = this.state.status;
+      console.log(status);
+      if(lastStatus === status){
+        this.setState({
+            status:'',
+            text:"",
+          })
+        }else{
+        this.setState({
+                status
+            })
+        }
+        const orderStatus = this.state.status;
+        const inputText = this.state.text;
+        //数据请求的方法
+        GetSetStorage.getStorageAsync('ethList').then((result) => {
+             this.setState({
+                details : JSON.parse(result).data
+           })
        })
-   })
   }
   changeOpentype(type){
   const lastType = this.state.type;
-    console.log(type)
+    console.log(type);
     if(lastType === type){
       this.setState({
          type:''
@@ -72,24 +65,22 @@ export default class SearchList extends Component{
               type
           })
       }
-
     GetSetStorage.getStorageAsync('ethList').then((result) => {
-  //         console.log(JSON.parse(result).data)
-           this.setState({
-              details : JSON.parse(result).data
-         })
+  //       console.log(JSON.parse(result).data)
+       this.setState({
+          details : JSON.parse(result).data
+     })
   })
   }
   renderExpenseItem(item , i) {
-  console.log('----search-----')
-  console.log(item)
+  console.log('----search-----');
+  console.log(item);
   const status = this.state.status;
   console.log(status)
      return (
           <ScrollViewItem key={i} detail={item} isHidden={`${item.status === this.state.status ? true : false}`}  navigator={this.props.navigation}/>
         )}
     render(){
-
     const { details } = this.state;
         return (
          <View>

@@ -8,9 +8,12 @@ import {
     TextInput,
     Alert,
     StyleSheet,
+    Platform,
     KeyboardAvoidingView
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast';
+import GetSetStorage from '../utils/GetSetStorage';
+import { Api } from '../service';
 // Styles
 import {AppSizes, AppComponent} from '../style/index';
 class RememberMnemonicPage extends Component{
@@ -54,7 +57,23 @@ class RememberMnemonicPage extends Component{
             if(val[index1]== question1){
                 val.splice(index1,1);
                 if(val[index2]== question2){
-                    this.props.navigation.navigate('Home')
+                    GetSetStorage.getStorageAsync('address').then((result) => {
+                        const address=result;
+                        console.log(Platform.OS);
+                        GetSetStorage.getStorageAsync('registrationId').then((result) => {
+                            const registrationId=result;
+                            const initData ={
+                                address:address,
+                                imei:'',
+                                type:Platform.OS,
+                                registrationID:registrationId
+                            };
+                            Api.initDevice({initData}).then(data => {
+                                console.log(data);
+                                this.props.navigation.navigate('Home')
+                            });
+                        })
+                    });
                 }
                 else{
                     this.refs.toast.show('请核对问题二 ');
@@ -113,7 +132,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: AppSizes.screen.height-60,
-
     },
     icon: {
         height: 22,

@@ -8,9 +8,18 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "JPUSHService.h"
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+#import <UserNotifications/UserNotifications.h>
+#endif
+
+static NSString *appKey = @"562b0cec8614a3ff48228735";
+static NSString *channel = @"App Store";
+static BOOL isProduction = false;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
+
 
 @end

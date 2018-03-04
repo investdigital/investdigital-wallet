@@ -62,7 +62,7 @@ const MainScreenNavigator = TabNavigator({
         }
     },
 }, {
-    animationEnabled: false, // 切换页面时不显示动画
+    animationEnabled: true, // 切换页面时不显示动画
     tabBarPosition: 'bottom', // 显示在底端，android 默认是显示在页面顶端的
     swipeEnabled: false, // 禁止左右滑动
     lazy:true,

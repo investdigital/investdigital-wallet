@@ -76,7 +76,7 @@ export default class EditView extends Component {
                             activeOpacity={1}
                             style={styles.promptContainer}
                         >
-                            <Text style={{fontSize: 15, color: 'black'}}>{titleTxt}</Text>
+                            <Text style={{fontSize: 15, color: 'black',marginTop:30}}>{titleTxt}</Text>
                             <View style={{flexDirection: 'row', margin: 15}}>
                                 <View style={[styles.center, {width: 230}]}>
                                     <TextInput

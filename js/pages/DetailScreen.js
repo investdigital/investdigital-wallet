@@ -52,7 +52,7 @@ class DetailScreen extends React.Component {
     render() {
         const {params} = this.props.navigation.state;
 
-        const data = params.data
+        const data = params.data;
 //        console.log('-----详情页里获取到的数据------')
 //        console.log(params.data)
         return (
@@ -60,7 +60,7 @@ class DetailScreen extends React.Component {
                 <Text style={{padding:5,marginTop:20}}>{data.time}</Text>
                 <Text style={{padding:5}} onPress={this._setClipboardContent}>已接收 IDT </Text>
                  <Text style={{padding:5}}>在 {data.from}</Text>
-                 <Text style={{padding:5}}>状态 : {data.status == 0 ? '进行中':dedatatail.status == 1?'已完成':'未知'}</Text>
+                 <Text style={{padding:5}}>状态 : {data.status == 0 ? '进行中':data.status == 1?'已完成':'未知'}</Text>
                  <Text style={{padding:5}}>备忘录 : </Text>
                  <Text style={{padding:5}}>金额 : {data.amount}</Text>
                  <Text style={{padding:5}}>已在此地址接收 </Text>

@@ -9,20 +9,20 @@ import {
     Clipboard,
     PanResponder,
     Alert,
+    ScrollView,
+    Keyboard,
     KeyboardAvoidingView,
     TouchableHighlight,
 } from 'react-native';
-
 // Service
 import { Api } from '../service';
-
 import GetSetStorage from '../utils/GetSetStorage';
-
 import * as Progress from 'react-native-progress';
 import Tx from 'ethereumjs-tx';
 import ScanQrcode from './ScanQrcode';
 import {AppSizes, AppComponent} from '../style/index';
-import getQueryString from '../utils/StringUtils'
+import getQueryString from '../utils/StringUtils';
+import AndroidBack from '../components/AndroidBack';
 class SendPage extends Component{
 constructor(props) {
         super(props);
@@ -125,13 +125,13 @@ constructor(props) {
                          tx.sign(key);
                          let serializedTx = tx.serialize();
                          let txStr = "0x" + serializedTx.toString("hex");
-                         console.log(txStr)
+                         console.log(txStr);
                          Api.sendETH({txStr}).then((data)=>{
-                         console.log('==发送交易成功====')
+                         console.log('==发送交易成功====');
                              console.log(data);
                              if(data.status==1){
                                  Alert.alert("交易成功");
-                                 let item1 ={txId:data.data,from:address, to:this.state.text, time:new Date().toLocaleString(),amount:this.state.num};
+                                 let item1 ={txId:data.data.txId,from:data.data.address, to:data.data.to,amount:data.data.amount,status:data.data.status,blockNumber:data.data.blockNumber};
                                  GetSetStorage.getStorageAsync('ethList').then((result) => {
                                      if (result == null || result == '') {
                                          var ethList = new Object();
@@ -148,7 +148,7 @@ constructor(props) {
                                  })
                              }
                              else{
-                                 Alert.alert(data.message)
+                                 Alert.alert(data.message);
                              }
                          })
                      });
@@ -182,21 +182,24 @@ constructor(props) {
     render(){
         const {navigate} = this.props.navigation;
         return(
+            <ScrollView style={{flex:1,backgroundColor:'#fff'}}>
+                <AndroidBack router1={this.props.navigation.state.routeName}/>
             <KeyboardAvoidingView
                 style={styles.container}
                 behavior="padding"
             >
+
                 <View>
-            <Text style={{padding:20}}>发送</Text>
-                 <TextInput
-                    style={styles.textinput}
-                    onChangeText={(text) => this.setState({text})}
-                    value={this.state.text}
-                     placeholder="至"
-                    underlineColorAndroid="transparent"
-                     clearButtonMode='while-editing'
-                  />
-                   <TextInput
+                    <Text style={{padding:20}}>发送</Text>
+                    <TextInput
+                        style={styles.textinput}
+                        onChangeText={(text) => this.setState({text})}
+                        value={this.state.text}
+                         placeholder="至"
+                        underlineColorAndroid="transparent"
+                         clearButtonMode='while-editing'
+                      />
+                    <TextInput
                     style={styles.textinput}
                        onChangeText={(num) => this.setState({num})}
                         value={this.state.num}
@@ -205,8 +208,8 @@ constructor(props) {
                         underlineColorAndroid="transparent"
                         clearButtonMode='while-editing'
                          />
-                   <TextInput
-                    style={styles.textinput}
+                    <TextInput
+                       style={styles.textinput}
                        onChangeText={(tip) => this.setState({tip})}
                        value={this.state.tip}
                        type='tip'
@@ -215,39 +218,39 @@ constructor(props) {
                        clearButtonMode='while-editing'
                         />
                 </View>
-                    <View style={styles.progress}>
-                        <Text style={{width:AppSizes.screen.widthThreeQuarters-20}}>
-                            矿工费用
+                <View style={styles.progress}>
+                    <Text style={{width:AppSizes.screen.widthThreeQuarters-20}}>
+                        矿工费用
+                    </Text>
+                    <TouchableHighlight underlayColor="#008AC4" onPress={() => navigate('CostMiner')}>
+                        <Text style={styles.btnText}>
+                            <Image
+                                source={require('../images/question.jpg')}
+                                style={{width: 20, height: 20}}
+                            />
                         </Text>
-                        <TouchableHighlight underlayColor="#008AC4" onPress={() => navigate('CostMiner')}>
-                            <Text style={styles.btnText}>
-                                <Image
-                                    source={require('../images/question.jpg')}
-                                    style={{width: 20, height: 20}}
+                    </TouchableHighlight>
+                </View>
+                <View style={styles.progress}>
+                    <View {...this._panResponder.panHandlers}>
+                        <Text>{this.state.gas}ether</Text>
+                        {this.state.progressShow?
+                            <Progress.Bar
+                                progress={this.state.progress}
+                                width={AppSizes.screen.widthThreeQuarters}
+                                style={{marginBottom:10}}
+                            />:
+                            <View>
+                                <TextInput
+                                    style={styles.textinput}
+                                    onChangeText={(gasPrice) => {this.setState({gasPrice:gasPrice,gas:gasPrice*this.state.gasLimit/1e9,progress:parseFloat((gasPrice-20)/80)})}}
+                                    value={this.state.gasPrice}
+                                    type='number'
+                                    placeholder="自定义Gas Price"
+                                    underlineColorAndroid="transparent"
+                                    clearButtonMode='while-editing'
                                 />
-                            </Text>
-                        </TouchableHighlight>
-                    </View>
-                    <View style={styles.progress}>
-                        <View {...this._panResponder.panHandlers}>
-                            <Text>{this.state.gas}ether</Text>
-                            {this.state.progressShow?
-                                <Progress.Bar
-                                    progress={this.state.progress}
-                                    width={AppSizes.screen.widthThreeQuarters}
-                                    style={{marginBottom:10}}
-                                />:
-                                <View>
-                                    <TextInput
-                                        style={styles.textinput}
-                                        onChangeText={(gasPrice) => {this.setState({gasPrice:gasPrice,gas:gasPrice*this.state.gasLimit/1e9,progress:parseFloat((gasPrice-20)/80)})}}
-                                        value={this.state.gasPrice}
-                                        type='number'
-                                        placeholder="自定义Gas Price"
-                                        underlineColorAndroid="transparent"
-                                        clearButtonMode='while-editing'
-                                    />
-                                    <TextInput
+                                <TextInput
                                     style={styles.textinput}
                                     onChangeText={(gasLimit) => this.setState({gasLimit:gasLimit,gas:this.state.gasPrice*gasLimit/1e9})}
                                     value={this.state.gasLimit}
@@ -255,31 +258,34 @@ constructor(props) {
                                     placeholder="自定义Gas"
                                     underlineColorAndroid="transparent"
                                     clearButtonMode='while-editing'
-                                    />
-                                </View>
-                            }
-                        </View>
+                                />
+                            </View>
+                        }
                     </View>
-                    <View style={styles.advancedSetting}>
-                        <Text style={{width:50,fontSize:12,color:this.state.progressShow ?'black':"#329aff"}} onPress={this.advancedSetting.bind(this)}>
-                            高级设置
-                        </Text>
-                    </View>
+                </View>
+                <View style={styles.advancedSetting}>
+                    <Text style={{width:50,fontSize:12,color:this.state.progressShow ?'black':"#329aff"}} onPress={this.advancedSetting.bind(this)}>
+                        高级设置
+                    </Text>
+                </View>
+                <View>
                     <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={this.onSend.bind(this)}>
                         <Text style={styles.btnText}>
                            发送
                         </Text>
                     </TouchableHighlight>
-                <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={() => navigate('ScanQrcode',{callback:(data)=>{this.scanQrcode(data)}})}>
-                    <Text style={styles.btnText}>
-                        扫描
-                    </Text>
-                </TouchableHighlight>
+                    <TouchableHighlight style={[AppComponent.btn, styles.btn]} underlayColor="#008AC4" onPress={() => navigate('ScanQrcode',{callback:(data)=>{this.scanQrcode(data)}})}>
+                        <Text style={styles.btnText}>
+                            扫描
+                        </Text>
+                    </TouchableHighlight>
+                </View>
+
             </KeyboardAvoidingView>
+            </ScrollView>
         );
     }
 }
-
 const styles = StyleSheet.create({
     icon: {
         width: 24,
